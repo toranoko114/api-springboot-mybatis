@@ -1,0 +1,1 @@
+INSERT INTO DEPARTMENT (DEPARTMENT_NAME) values ('営業部'),('企画部'),('開発部');
