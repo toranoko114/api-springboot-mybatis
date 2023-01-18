@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper">
+
+  <resultMap id="employeeMap" type="com.course.apispringbootmybatis.domain.dto.EmployeeDto">
+    <id property="employeeId" column="EMPLOYEE_ID"/>
+    <result property="employeeName" column="EMPLOYEE_NAME"/>
+    <association property="department" javaType="com.course.apispringbootmybatis.domain.dto.DepartmentDto">
+      <id property="departmentId" column="DEPARTMENT_ID"/>
+      <result property="departmentName" column="DEPARTMENT_NAME"/>
+    </association>
+  </resultMap>
+
+  <select id="selectById" resultMap="employeeMap">
+    SELECT
+      EMP.EMPLOYEE_ID AS EMPLOYEE_ID,
+      EMP.EMPLOYEE_NAME AS EMPLOYEE_NAME,
+      DPM.DEPARTMENT_ID AS DEPARTMENT_ID,
+      DPM.DEPARTMENT_NAME AS DEPARTMENT_NAME
+    FROM
+      EMPLOYEE EMP
+        LEFT JOIN DEPARTMENT DPM
+        ON EMP.DEPARTMENT_ID = DPM.DEPARTMENT_ID
+    WHERE
+      EMP.EMPLOYEE_ID = #{employeeId}
+  </select>
+
+</mapper>
