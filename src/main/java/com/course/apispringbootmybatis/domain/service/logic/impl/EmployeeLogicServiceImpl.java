@@ -1,5 +1,6 @@
 package com.course.apispringbootmybatis.domain.service.logic.impl;
 
+import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundException;
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
@@ -20,12 +21,12 @@ public class EmployeeLogicServiceImpl implements EmployeeLogicService {
   private final HistoryMapper historyMapper;
 
   @Override
-  public EmployeeDto selectById(Integer id) {
+  public EmployeeDto selectById(Integer employeeId) {
     // 社員情報がない場合はExceptionをthrowする
-    var employeeDto = Optional.of(this.employeeMapper.selectById(id))
-        .orElseThrow(RuntimeException::new);
+    var employeeDto = this.employeeMapper.selectById(employeeId)
+        .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
     // 社員情報がある場合のみ履歴を取得する
-    employeeDto.setHistoryList(Optional.of(historyMapper.selectById(id)).orElse(List.of()));
+    employeeDto.setHistoryList(Optional.of(historyMapper.selectById(employeeId)).orElse(List.of()));
     return employeeDto;
   }
 
