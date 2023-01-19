@@ -17,6 +17,8 @@ public class EmployeeResponse {
   private String employeeId;
   @JsonProperty("employeeName")
   private String employeeName;
+  @JsonProperty("gender")
+  private String gender;
   @JsonProperty("department")
   private DepartmentDto department;
 

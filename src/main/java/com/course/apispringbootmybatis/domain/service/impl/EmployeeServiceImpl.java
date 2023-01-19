@@ -1,11 +1,13 @@
 package com.course.apispringbootmybatis.domain.service.impl;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
+import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundException;
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogicService;
+import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,15 +19,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   private final ModelMapper modelMapper;
   private final EmployeeLogicService service;
+  private final EmployeeMapper employeeMapper;
 
   @Override
-  public EmployeeDto selectById(Integer id) {
-    return this.service.selectById(id);
+  public EmployeeDto selectById(Integer employeeId) {
+    return this.employeeMapper.selectById(employeeId)
+        .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
   }
 
   @Override
   public List<EmployeeDto> selectAll() {
-    return List.of(new EmployeeDto());
+    return this.employeeMapper.selectAll();
   }
 
   @Override
@@ -42,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   public EmployeeDto update(EmployeeRequest request) {
     return EmployeeDto.builder().build();
   }
-
 
 
   /**

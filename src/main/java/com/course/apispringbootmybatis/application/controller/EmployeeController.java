@@ -3,6 +3,7 @@ package com.course.apispringbootmybatis.application.controller;
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.application.controller.message.EmployeeResponse;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,13 @@ public class EmployeeController {
   @Pattern(regexp = "^\\d{1,10}$") String employeeId) {
     return this.modelMapper.map(service.selectById(Integer.valueOf(employeeId)),
         EmployeeResponse.class);
+  }
+
+  @GetMapping("/")
+  // UTで文字種のテストをする
+  public List<EmployeeResponse> fetchEmployee() {
+    var employeeDtoList = service.selectAll();
+    return List.of(this.modelMapper.map(employeeDtoList, EmployeeResponse[].class));
   }
 
   @PostMapping("/")

@@ -15,7 +15,7 @@ public enum DepartmentEnum {
 
 
   // 部署ID
-  private final Integer id;
+  private final Integer departmentId;
 
   // 部署名
   private final String departmentName;

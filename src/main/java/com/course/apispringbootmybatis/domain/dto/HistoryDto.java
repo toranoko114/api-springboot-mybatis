@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HistoryDto {
 
+  private Integer historyId;
   private Integer employeeId;
   private Integer departmentId;
   private String content;

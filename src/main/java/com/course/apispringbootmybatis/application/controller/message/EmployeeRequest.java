@@ -17,8 +17,11 @@ public class EmployeeRequest {
   @JsonProperty("employeeName")
   private String employeeName;
   @NotNull
+  @JsonProperty("gender")
+  private String gender;
+  @NotNull
   @JsonProperty("departmentId")
-  private int departmentId;
+  private Integer departmentId;
   @JsonProperty("content")
   private String content;
 
