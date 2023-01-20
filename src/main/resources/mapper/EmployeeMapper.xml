@@ -2,12 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper">
 
-  <resultMap id="employeeMap" type="com.course.apispringbootmybatis.domain.dto.EmployeeDto">
+  <!-- 取得結果とDtoとのマッピング定義-->
+  <resultMap id="employeeMap" type="EmployeeDto">
     <id property="employeeId" column="EMP_EMPLOYEE_ID"/>
     <result property="employeeName" column="EMP_EMPLOYEE_NAME"/>
     <result property="gender" column="EMP_GENDER"/>
-    <result property="department" column="DPM_DEPARTMENT_ID" />
-    <collection property="historyList" ofType="com.course.apispringbootmybatis.domain.dto.HistoryDto">
+    <result property="department" column="EMP_DEPARTMENT_ID" />
+    <association property="personal" javaType="PersonalDataDto">
+      <id property="employeeId" column="PD_EMPLOYEE_ID"/>
+      <result property="birthday" column="PD_BIRTHDAY"/>
+      <result property="telephoneNumber" column="PD_TELEPHONE_NUMBER"/>
+      <result property="mailAddress" column="PD_MAIL_ADDRESS"/>
+    </association>
+    <collection property="historyList" ofType="HistoryDto">
       <id property="historyId" column="HST_HISTORY_ID"/>
       <result property="employeeId" column="HST_EMPLOYEE_ID"/>
       <result property="departmentId" column="HST_DEPARTMENT_ID"/>
@@ -15,18 +22,38 @@
     </collection>
   </resultMap>
 
+  <!-- 取得するカラム定義 -->
+  <sql id="employeeColumns">
+    ${alias}.EMPLOYEE_ID as EMP_EMPLOYEE_ID,
+    ${alias}.EMPLOYEE_NAME as EMP_EMPLOYEE_NAME,
+    ${alias}.GENDER as EMP_GENDER,
+    ${alias}.DEPARTMENT_ID as EMP_DEPARTMENT_ID,
+  </sql>
+  <sql id="personalColumns">
+    PD.EMPLOYEE_ID as PD_EMPLOYEE_ID,
+    PD.BIRTHDAY as PD_BIRTHDAY,
+    PD.TELEPHONE_NUMBER as PD_TELEPHONE_NUMBER,
+    PD.MAIL_ADDRESS as PD_MAIL_ADDRESS,
+  </sql>
+  <sql id="historyColumns">
+    HST.HISTORY_ID as HST_HISTORY_ID,
+    HST.EMPLOYEE_ID as HST_EMPLOYEE_ID,
+    HST.DEPARTMENT_ID as HST_DEPARTMENT_ID,
+    HST.CONTENT as HST_CONTENT
+  </sql>
+
   <sql id="baseSelect">
     SELECT
-      EMP.EMPLOYEE_ID AS EMP_EMPLOYEE_ID,
-      EMP.EMPLOYEE_NAME AS EMP_EMPLOYEE_NAME,
-      EMP.GENDER AS EMP_GENDER,
-      DPM.DEPARTMENT_ID AS DPM_DEPARTMENT_ID,
-      HST.HISTORY_ID AS HST_HISTORY_ID,
-      HST.EMPLOYEE_ID AS HST_EMPLOYEE_ID,
-      HST.DEPARTMENT_ID AS HST_DEPARTMENT_ID,
-      HST.CONTENT AS HST_CONTENT
+      <include refid="employeeColumns">
+        <property name="alias" value="EMP"/>
+      </include>
+      <include refid="personalColumns"/>
+      <include refid="historyColumns"/>
     FROM
       EMPLOYEE EMP
+        LEFT JOIN PERSONAL_DATA PD
+          ON
+          EMP.EMPLOYEE_ID = PD.EMPLOYEE_ID
         LEFT JOIN HISTORY HST
           ON
           EMP.EMPLOYEE_ID = HST.EMPLOYEE_ID

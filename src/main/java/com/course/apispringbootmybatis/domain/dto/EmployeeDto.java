@@ -1,7 +1,7 @@
 package com.course.apispringbootmybatis.domain.dto;
 
-import com.course.apispringbootmybatis.enums.DepartmentEnum;
-import com.course.apispringbootmybatis.enums.GenderEnum;
+import com.course.apispringbootmybatis.enums.Department;
+import com.course.apispringbootmybatis.enums.Gender;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +16,9 @@ public class EmployeeDto {
 
   private Integer employeeId;
   private String employeeName;
-  private GenderEnum gender;
-  private DepartmentEnum department;
+  private Gender gender;
+  private Department department;
+  private PersonalDataDto personal;
   private List<HistoryDto> historyList;
 
 }

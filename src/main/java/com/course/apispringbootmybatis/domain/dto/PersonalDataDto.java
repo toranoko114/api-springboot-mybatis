@@ -1,5 +1,6 @@
-package com.course.apispringbootmybatis.domain.entity;
+package com.course.apispringbootmybatis.domain.dto;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeEntity {
+public class PersonalDataDto {
 
   private Integer employeeId;
-  private String gender;
-  private Integer departmentId;
-  private String employeeName;
-
+  private Date birthday;
+  private String telephoneNumber;
+  private String mailAddress;
 
 }

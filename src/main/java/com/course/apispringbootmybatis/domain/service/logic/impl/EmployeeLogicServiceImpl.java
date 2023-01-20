@@ -4,9 +4,11 @@ import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundExc
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
+import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogicService;
 import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.PersonalDataMapper;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,8 @@ public class EmployeeLogicServiceImpl implements EmployeeLogicService {
 
   private final EmployeeMapper employeeMapper;
   private final HistoryMapper historyMapper;
+
+  private final PersonalDataMapper personalDataMapper;
 
   @Override
   public EmployeeDto selectById(Integer employeeId) {
@@ -34,13 +38,17 @@ public class EmployeeLogicServiceImpl implements EmployeeLogicService {
    * 社員情報を登録する.
    *
    * @param employee 社員
+   * @param personal 個人情報
    * @param history  履歴
    */
   @Override
   @Transactional
-  public void insert(EmployeeEntity employee, HistoryEntity history) {
+  public void insert(EmployeeEntity employee, PersonalDataEntity personal, HistoryEntity history) {
     //社員テーブルに追加
     employeeMapper.insert(employee);
+    // 個人情報テーブルに追加
+    personal.setEmployeeId(employee.getEmployeeId());
+    personalDataMapper.insert(personal);
     //履歴テーブルに追加
     history.setEmployeeId(employee.getEmployeeId());
     historyMapper.insert(history);

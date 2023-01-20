@@ -1,6 +1,7 @@
 package com.course.apispringbootmybatis.application.controller.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class EmployeeResponse {
   private String gender;
   @JsonProperty("department")
   private DepartmentDto department;
+  @JsonProperty("personal")
+  private PersonalDataDto personal;
 
   @JsonProperty("historyList")
   private List<HistoryDto> historyList;
@@ -37,8 +40,24 @@ public class EmployeeResponse {
   }
 
   @Data
+  public static class PersonalDataDto {
+
+    @JsonProperty("employeeId")
+    private Integer employeeId;
+    @JsonProperty("birthday")
+    private Date birthday;
+    @JsonProperty("telephoneNumber")
+    private String telephoneNumber;
+    @JsonProperty("mailAddress")
+    private String mailAddress;
+
+  }
+
+  @Data
   private static class HistoryDto {
 
+    @JsonProperty("historyId")
+    private Integer historyId;
     @JsonProperty("employeeId")
     private Integer employeeId;
     @JsonProperty("departmentId")
