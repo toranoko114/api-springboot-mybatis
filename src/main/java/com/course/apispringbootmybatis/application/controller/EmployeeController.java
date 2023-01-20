@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,13 +35,19 @@ public class EmployeeController {
 
   @GetMapping("/")
   // UTで文字種のテストをする
-  public List<EmployeeResponse> fetchEmployee() {
+  public List<EmployeeResponse> fetchEmployees() {
     var employeeDtoList = service.selectAll();
     return List.of(this.modelMapper.map(employeeDtoList, EmployeeResponse[].class));
   }
 
   @PostMapping("/")
   public EmployeeResponse createEmployee(
+      @Valid @RequestBody EmployeeRequest request) {
+    return this.modelMapper.map(service.create(request), EmployeeResponse.class);
+  }
+
+  @PatchMapping("/")
+  public EmployeeResponse updateEmployee(
       @Valid @RequestBody EmployeeRequest request) {
     return this.modelMapper.map(service.create(request), EmployeeResponse.class);
   }

@@ -10,10 +10,12 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface HistoryMapper {
 
-  @Insert("INSERT INTO HISTORY (EMPLOYEE_ID, DEPARTMENT_ID, CONTENT) VALUES (#{employeeId}, #{departmentId}, #{content})")
+  @Insert("INSERT INTO HISTORY "
+      + "(START_DATE, EMPLOYEE_ID, DEPARTMENT_ID, CONTENT) "
+      + "VALUES (#{startDate}, #{employeeId}, #{departmentId}, #{content})")
   void insert(HistoryEntity history);
 
-  @Select("SELECT EMPLOYEE_ID, DEPARTMENT_ID, CONTENT FROM HISTORY WHERE EMPLOYEE_ID = #{employeeId}")
+  @Select("SELECT * WHERE EMPLOYEE_ID = #{employeeId}")
   List<HistoryDto> selectById(Integer employeeId);
 
 }

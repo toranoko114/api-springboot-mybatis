@@ -42,6 +42,10 @@ public class EmployeeRequest {
   @Pattern(regexp = RegexConstants.MAIL_ADDRESS, message = "メールアドレスの形式が違います。")
   @Size(max = 256)
   private String mailAddress;
+  @NotNull
+  @JsonProperty("startDate")
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private Date startDate;
   @JsonProperty("content")
   private String content;
 

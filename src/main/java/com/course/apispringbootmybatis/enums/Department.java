@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Department {
 
+  // マスタは変わらない前提
+
   OTHER(0, "その他"),
   INDEPENDENT(1, "無所属"),
   SALES(2, "営業部"),
