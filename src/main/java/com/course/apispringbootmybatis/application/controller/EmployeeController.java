@@ -2,6 +2,7 @@ package com.course.apispringbootmybatis.application.controller;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.application.controller.message.EmployeeResponse;
+import com.course.apispringbootmybatis.application.controller.validation.RegexConstants;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ public class EmployeeController {
   @GetMapping("/{employeeId}")
   // UTで文字種のテストをする
   public EmployeeResponse fetchEmployee(@PathVariable(value = "employeeId")
-  @Pattern(regexp = "^\\d{1,10}$") String employeeId) {
+  @Pattern(regexp = RegexConstants.EMPLOYEE_ID) String employeeId) {
     return this.modelMapper.map(service.selectById(Integer.valueOf(employeeId)),
         EmployeeResponse.class);
   }

@@ -1,5 +1,6 @@
 package com.course.apispringbootmybatis.application.controller.message;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,7 @@ public class EmployeeResponse {
     @JsonProperty("employeeId")
     private Integer employeeId;
     @JsonProperty("birthday")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     @JsonProperty("telephoneNumber")
     private String telephoneNumber;
