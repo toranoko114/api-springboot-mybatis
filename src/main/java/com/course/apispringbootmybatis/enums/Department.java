@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum DepartmentEnum {
+public enum Department {
 
   OTHER(0, "その他"),
   INDEPENDENT(1, "無所属"),
