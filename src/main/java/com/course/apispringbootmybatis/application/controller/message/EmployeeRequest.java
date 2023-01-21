@@ -5,6 +5,7 @@ import com.course.apispringbootmybatis.application.controller.validation.RegexCo
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -42,12 +43,23 @@ public class EmployeeRequest {
   @Pattern(regexp = RegexConstants.MAIL_ADDRESS, message = "メールアドレスの形式が違います。")
   @Size(max = 256)
   private String mailAddress;
-  @NotNull
-  @JsonProperty("startDate")
-  @JsonFormat(pattern = "yyyy-MM-dd")
-  private Date startDate;
-  @JsonProperty("content")
-  private String content;
+  @JsonProperty("historyList")
+  private List<History> historyList;
+
+  @Data
+  private static class History {
+
+    @NotNull
+    @JsonProperty("startDate")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date startDate;
+    @NotNull
+    @JsonProperty("departmentId")
+    private Integer departmentId;
+    @JsonProperty("content")
+    private String content;
+
+  }
 
 
 }

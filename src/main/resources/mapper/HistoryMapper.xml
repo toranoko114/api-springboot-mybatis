@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper">
+  <!-- 一括登録 -->
+  <insert id="bulkUpsert">
+    INSERT INTO HISTORY
+    (
+      START_DATE,
+      EMPLOYEE_ID,
+      DEPARTMENT_ID,
+      CONTENT
+    )
+    VALUES
+    <foreach collection="historyList" item="item" separator=",">
+      (
+      #{item.startDate},
+      #{item.employeeId},
+      #{item.departmentId},
+      #{item.content}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+      START_DATE = VALUES(START_DATE),
+      EMPLOYEE_ID = VALUES(EMPLOYEE_ID),
+      DEPARTMENT_ID = VALUES(DEPARTMENT_ID),
+      CONTENT = VALUES(CONTENT)
+  </insert>
+</mapper>

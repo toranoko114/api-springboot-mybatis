@@ -16,6 +16,7 @@
     </association>
     <collection property="historyList" ofType="HistoryDto">
       <id property="historyId" column="HST_HISTORY_ID"/>
+      <result property="startDate" column="HST_START_DATE"/>
       <result property="employeeId" column="HST_EMPLOYEE_ID"/>
       <result property="departmentId" column="HST_DEPARTMENT_ID"/>
       <result property="content" column="HST_CONTENT"/>
@@ -37,6 +38,7 @@
   </sql>
   <sql id="historyColumns">
     HST.HISTORY_ID as HST_HISTORY_ID,
+    HST.START_DATE as HST_START_DATE,
     HST.EMPLOYEE_ID as HST_EMPLOYEE_ID,
     HST.DEPARTMENT_ID as HST_DEPARTMENT_ID,
     HST.CONTENT as HST_CONTENT
@@ -72,5 +74,15 @@
     <include refid="baseSelect"/>
   </select>
 
+  <update id="update">
+    UPDATE
+      EMPLOYEE
+    SET
+      DEPARTMENT_ID = #{departmentId},
+      EMPLOYEE_NAME = #{employeeName},
+      GENDER = #{gender}
+    WHERE
+      EMPLOYEE_ID = #{employeeId}
+  </update>
 
 </mapper>

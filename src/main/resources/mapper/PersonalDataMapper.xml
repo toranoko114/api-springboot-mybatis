@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.PersonalDataMapper">
+  <!-- 一括登録 -->
+  <insert id="upsert">
+    INSERT INTO PERSONAL_DATA
+    (
+      EMPLOYEE_ID,
+      BIRTHDAY,
+      TELEPHONE_NUMBER,
+      MAIL_ADDRESS
+    )
+    VALUES
+      (
+      #{employeeId},
+      #{birthday},
+      #{telephoneNumber},
+      #{mailAddress}
+      )
+    ON DUPLICATE KEY UPDATE
+      TELEPHONE_NUMBER = #{telephoneNumber},
+      MAIL_ADDRESS = #{mailAddress}
+  </insert>
+
+
+</mapper>

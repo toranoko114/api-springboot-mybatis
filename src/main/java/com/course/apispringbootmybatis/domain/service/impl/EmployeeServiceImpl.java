@@ -7,19 +7,22 @@ import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
-import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogicService;
+import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+/**
+ * 社員情報APIのサービス実装クラス
+ */
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
   private final ModelMapper modelMapper;
-  private final EmployeeLogicService service;
+  private final EmployeeLogic service;
   private final EmployeeMapper employeeMapper;
 
   @Override
@@ -37,15 +40,29 @@ public class EmployeeServiceImpl implements EmployeeService {
   public EmployeeDto create(EmployeeRequest request) {
     var employee = this.modelMapper.map(request, EmployeeEntity.class);
     var personal = this.modelMapper.map(request, PersonalDataEntity.class);
-    var history = this.modelMapper.map(request, HistoryEntity.class);
-    // 社員情報の登録
-    this.service.insert(employee, personal, history);
-    // 登録した情報の検索して返却
+    var historyList = List.of(
+        this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
+    // 社員情報の登録（トランザクション）
+    this.service.insert(employee, personal, historyList);
+    // 登録した情報を検索して返却
     return this.selectById(employee.getEmployeeId());
   }
 
   @Override
-  public EmployeeDto update(EmployeeRequest request) {
-    return EmployeeDto.builder().build();
+  public EmployeeDto update(Integer employeeId, EmployeeRequest request) {
+    // 社員が存在する場合のみ後続処理をする
+    this.selectById(employeeId);
+    // 値の設定
+    var employee = this.modelMapper.map(request, EmployeeEntity.class);
+    employee.setEmployeeId(employeeId);
+    var personal = this.modelMapper.map(request, PersonalDataEntity.class);
+    personal.setEmployeeId(employeeId);
+    var historyList = List.of(
+        this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
+    historyList.forEach(history -> history.setEmployeeId(employeeId));
+    // 社員情報の更新（トランザクション）
+    this.service.update(employee, personal, historyList);
+
+    return this.selectById(employeeId);
   }
 }

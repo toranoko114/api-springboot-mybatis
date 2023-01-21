@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 社員情報APIのコントローラー
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/employee")
@@ -27,10 +30,10 @@ public class EmployeeController {
 
   @GetMapping("/{employeeId}")
   // UTで文字種のテストをする
-  public EmployeeResponse fetchEmployee(@PathVariable(value = "employeeId")
-  @Pattern(regexp = RegexConstants.EMPLOYEE_ID) String employeeId) {
-    return this.modelMapper.map(service.selectById(Integer.valueOf(employeeId)),
-        EmployeeResponse.class);
+  public EmployeeResponse fetchEmployee(
+      @PathVariable(value = "employeeId")
+      @Pattern(regexp = RegexConstants.EMPLOYEE_ID) Integer employeeId) {
+    return this.modelMapper.map(service.selectById(employeeId), EmployeeResponse.class);
   }
 
   @GetMapping("/")
@@ -41,15 +44,16 @@ public class EmployeeController {
   }
 
   @PostMapping("/")
-  public EmployeeResponse createEmployee(
-      @Valid @RequestBody EmployeeRequest request) {
+  public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeRequest request) {
     return this.modelMapper.map(service.create(request), EmployeeResponse.class);
   }
 
-  @PatchMapping("/")
+  @PatchMapping("/{employeeId}")
   public EmployeeResponse updateEmployee(
+      @PathVariable(value = "employeeId")
+      @Pattern(regexp = RegexConstants.EMPLOYEE_ID) Integer employeeId,
       @Valid @RequestBody EmployeeRequest request) {
-    return this.modelMapper.map(service.create(request), EmployeeResponse.class);
+    return this.modelMapper.map(service.update(employeeId, request), EmployeeResponse.class);
   }
 
 

@@ -9,14 +9,43 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 
+/**
+ * Employeeテーブル Mapperクラス
+ */
 @Mapper
 public interface EmployeeMapper {
 
+  /**
+   * 社員IDに該当する社員情報の取得.
+   *
+   * @param employeeId 社員ID
+   * @return 社員情報
+   */
   Optional<EmployeeDto> selectById(@Param("employeeId") Integer employeeId);
 
+  /**
+   * 全ての社員情報の取得.
+   *
+   * @return 社員情報リスト
+   */
   List<EmployeeDto> selectAll();
 
-  @Insert("INSERT INTO EMPLOYEE (DEPARTMENT_ID, EMPLOYEE_NAME, GENDER) VALUES (#{departmentId}, #{employeeName}, #{gender})")
+  /**
+   * 社員情報の登録.
+   *
+   * @param employee 社員情報エンティティ
+   */
+  @Insert("INSERT INTO EMPLOYEE "
+      + "(DEPARTMENT_ID, EMPLOYEE_NAME, GENDER) "
+      + "VALUES (#{departmentId}, #{employeeName}, #{gender})")
   @Options(useGeneratedKeys = true, keyProperty = "employeeId")
   void insert(EmployeeEntity employee);
+
+  /**
+   * 社員IDに該当する社員情報の更新.
+   *
+   * @param employee 社員情報エンティティ
+   */
+  void update(EmployeeEntity employee);
+
 }
