@@ -3,6 +3,7 @@ package com.course.apispringbootmybatis.infrastructure.mapper;
 import com.course.apispringbootmybatis.domain.dto.HistoryDto;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import java.util.List;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,7 +19,7 @@ public interface HistoryMapper {
    * @param employeeId 社員ID
    * @return 社員履歴情報リスト
    */
-  @Select("SELECT * WHERE EMPLOYEE_ID = #{employeeId}")
+  @Select("SELECT * FROM HISTORY WHERE EMPLOYEE_ID = #{employeeId}")
   List<HistoryDto> selectById(Integer employeeId);
 
   /**
@@ -27,5 +28,13 @@ public interface HistoryMapper {
    * @param historyList 社員履歴情報リスト
    */
   void bulkUpsert(List<HistoryEntity> historyList);
+
+  /**
+   * 社員IDに該当する社員履歴情報の削除.
+   *
+   * @param employeeId 社員ID
+   */
+  @Delete("DELETE FROM HISTORY WHERE EMPLOYEE_ID = #{employeeId}")
+  void delete(Integer employeeId);
 
 }

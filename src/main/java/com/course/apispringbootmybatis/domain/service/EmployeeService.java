@@ -41,5 +41,12 @@ public interface EmployeeService {
    */
   EmployeeDto update(Integer employeeId, EmployeeRequest request);
 
+  /**
+   * 社員IDに該当する社員情報の削除.
+   *
+   * @param employeeId 社員ID
+   */
+  void deleteById(Integer employeeId);
+
 
 }

@@ -39,4 +39,11 @@ public interface EmployeeLogic {
    */
   void update(EmployeeEntity employee, PersonalDataEntity personal, List<HistoryEntity> history);
 
+  /**
+   * 社員IDに該当する社員情報の削除.
+   *
+   * @param employeeId 社員ID
+   */
+  void deleteById(Integer employeeId);
+
 }

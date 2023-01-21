@@ -69,4 +69,12 @@ public class EmployeeLogicImpl implements EmployeeLogic {
     //履歴テーブルに追加
     historyMapper.bulkUpsert(historyList);
   }
+
+  @Override
+  @Transactional
+  public void deleteById(Integer employeeId) {
+    employeeMapper.delete(employeeId);
+    personalDataMapper.delete(employeeId);
+    historyMapper.delete(employeeId);
+  }
 }

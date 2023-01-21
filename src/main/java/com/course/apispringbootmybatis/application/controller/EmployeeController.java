@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,5 +58,13 @@ public class EmployeeController {
     return this.modelMapper.map(service.update(employeeId, request), EmployeeResponse.class);
   }
 
+  @DeleteMapping("/{employeeId}")
+  public ResponseEntity<Void> deleteById(
+      @PathVariable(value = "employeeId")
+      @Pattern(regexp = RegexConstants.EMPLOYEE_ID)
+      Integer employeeId) {
+    service.deleteById(employeeId);
+    return ResponseEntity.noContent().build();
+  }
 
 }

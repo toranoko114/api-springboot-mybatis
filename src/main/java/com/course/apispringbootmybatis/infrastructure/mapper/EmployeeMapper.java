@@ -4,6 +4,7 @@ import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -47,5 +48,13 @@ public interface EmployeeMapper {
    * @param employee 社員情報エンティティ
    */
   void update(EmployeeEntity employee);
+
+  /**
+   * 社員IDに該当する社員情報の削除.
+   *
+   * @param employeeId 社員ID
+   */
+  @Delete("DELETE FROM EMPLOYEE WHERE EMPLOYEE_ID = #{employeeId}")
+  void delete(Integer employeeId);
 
 }

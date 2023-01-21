@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
 
   private final ModelMapper modelMapper;
-  private final EmployeeLogic service;
+  private final EmployeeLogic logic;
   private final EmployeeMapper employeeMapper;
 
   @Override
@@ -43,7 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     var historyList = List.of(
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
     // 社員情報の登録（トランザクション）
-    this.service.insert(employee, personal, historyList);
+    this.logic.insert(employee, personal, historyList);
     // 登録した情報を検索して返却
     return this.selectById(employee.getEmployeeId());
   }
@@ -61,8 +61,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
     historyList.forEach(history -> history.setEmployeeId(employeeId));
     // 社員情報の更新（トランザクション）
-    this.service.update(employee, personal, historyList);
+    this.logic.update(employee, personal, historyList);
 
     return this.selectById(employeeId);
+  }
+
+  @Override
+  public void deleteById(Integer employeeId) {
+    this.logic.deleteById(employeeId);
   }
 }
