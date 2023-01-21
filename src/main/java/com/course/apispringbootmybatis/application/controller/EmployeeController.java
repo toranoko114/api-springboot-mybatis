@@ -31,7 +31,6 @@ public class EmployeeController {
   private final ModelMapper modelMapper;
 
   @GetMapping("/{employeeId}")
-  // UTで文字種のテストをする
   public EmployeeResponse fetchEmployee(
       @PathVariable(value = "employeeId")
       @Pattern(regexp = RegexConstants.EMPLOYEE_ID) Integer employeeId) {
@@ -39,7 +38,6 @@ public class EmployeeController {
   }
 
   @GetMapping("/")
-  // UTで文字種のテストをする
   public List<EmployeeResponse> fetchEmployees() {
     var employeeDtoList = service.selectAll();
     return List.of(this.modelMapper.map(employeeDtoList, EmployeeResponse[].class));
