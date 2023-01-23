@@ -4,7 +4,9 @@ package com.course.apispringbootmybatis.application.controller.message;
 import com.course.apispringbootmybatis.application.controller.validation.RegexConstants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import java.time.LocalDate;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -32,7 +34,8 @@ public class EmployeeRequest {
   @NotNull
   @JsonProperty("birthday")
   @JsonFormat(pattern = "yyyy-MM-dd")
-  private Date birthday;
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  private LocalDate birthday;
   @NotNull
   @JsonProperty("telephoneNumber")
   @Pattern(regexp = RegexConstants.TELPHONE_NUMBER, message = "電話番号の形式が違います。")
@@ -52,7 +55,8 @@ public class EmployeeRequest {
     @NotNull
     @JsonProperty("startDate")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date startDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate startDate;
     @NotNull
     @JsonProperty("departmentId")
     private Integer departmentId;

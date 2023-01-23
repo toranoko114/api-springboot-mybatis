@@ -2,7 +2,9 @@ package com.course.apispringbootmybatis.application.controller.message;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +49,8 @@ public class EmployeeResponse {
     private Integer employeeId;
     @JsonProperty("birthday")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate birthday;
     @JsonProperty("telephoneNumber")
     private String telephoneNumber;
     @JsonProperty("mailAddress")
@@ -60,7 +63,8 @@ public class EmployeeResponse {
 
     @JsonProperty("startDate")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date startDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate startDate;
     @JsonProperty("employeeId")
     private Integer employeeId;
     @JsonProperty("departmentId")
