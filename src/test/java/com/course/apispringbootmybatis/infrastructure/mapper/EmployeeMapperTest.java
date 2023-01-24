@@ -34,29 +34,29 @@ class EmployeeMapperTest {
     // arrange
     var history = List.of(
         HistoryDto.builder()
-            .historyId(3)
-            .employeeId(2)
+            .historyId(1)
+            .employeeId(1)
             .departmentId(2)
             .startDate(LocalDate.of(2022, 1, 1))
             .content("テスト入社")
             .build(),
         HistoryDto.builder()
-            .historyId(4)
-            .employeeId(2)
+            .historyId(2)
+            .employeeId(1)
             .departmentId(1)
             .startDate(LocalDate.of(2023, 1, 1))
             .content("テスト退職").build()
     );
 
     var personal = PersonalDataDto.builder()
-        .employeeId(2)
+        .employeeId(1)
         .birthday(LocalDate.of(2020, 1, 1))
         .telephoneNumber("00000000000")
         .mailAddress("test@gmail.com").build();
 
     var expected = Optional.of(
         EmployeeDto.builder()
-            .employeeId(2)
+            .employeeId(1)
             .employeeName("テスト")
             .gender(Gender.FEMALE)
             .department(Department.INDEPENDENT)
@@ -66,7 +66,7 @@ class EmployeeMapperTest {
     );
 
     // act
-    var actual = target.selectById(2);
+    var actual = target.selectById(1);
 
     // assert
     Assertions.assertEquals(expected, actual);

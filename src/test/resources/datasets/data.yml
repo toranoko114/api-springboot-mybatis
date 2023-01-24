@@ -4,14 +4,14 @@ employee:
     gender: 'FEMALE'
 
 personal_data:
-  - employee_id: 2
+  - employee_id: 1
     birthday: '2020-01-01'
     telephone_number: '00000000000'
     mail_address: 'test@gmail.com'
 
 history:
   - &base
-    employee_id: 2
+    employee_id: 1
     start_date: '2022-01-01'
     department_id: 2
     content: 'テスト入社'
