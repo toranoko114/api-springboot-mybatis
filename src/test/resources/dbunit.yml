@@ -1,0 +1,7 @@
+# データベース接続はテスト間で再利用されないようにする
+cacheConnection: false
+connectionConfig:
+  driver: org.h2.Driver
+  url: jdbc:h2:mem:campany;DB_CLOSE_ON_EXIT=TRUE;MODE=MySQL
+  user: sa
+  password:
