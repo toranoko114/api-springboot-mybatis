@@ -1,7 +1,5 @@
 package com.course.apispringbootmybatis.domain.service.logic.impl;
 
-import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundException;
-import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
@@ -10,7 +8,6 @@ import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.PersonalDataMapper;
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,16 +23,6 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   private final HistoryMapper historyMapper;
 
   private final PersonalDataMapper personalDataMapper;
-
-  @Override
-  public EmployeeDto selectById(Integer employeeId) {
-    // 社員情報がない場合はExceptionをthrowする
-    var employeeDto = this.employeeMapper.selectById(employeeId)
-        .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
-    // 社員情報がある場合のみ履歴を取得する
-    employeeDto.setHistoryList(Optional.of(historyMapper.selectById(employeeId)).orElse(List.of()));
-    return employeeDto;
-  }
 
   /**
    * 社員情報を登録する.

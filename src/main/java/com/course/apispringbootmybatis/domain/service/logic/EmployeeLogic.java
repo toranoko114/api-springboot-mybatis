@@ -1,6 +1,5 @@
 package com.course.apispringbootmybatis.domain.service.logic;
 
-import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
@@ -10,16 +9,6 @@ import java.util.List;
  * 社員情報APIのロジックインターフェース
  */
 public interface EmployeeLogic {
-
-
-  /**
-   * 社員IDに該当する社員情報の取得.
-   *
-   * @param employeeId 社員ID
-   * @return 社員情報
-   */
-  EmployeeDto selectById(Integer employeeId);
-
 
   /**
    * 社員の各種情報の登録.
