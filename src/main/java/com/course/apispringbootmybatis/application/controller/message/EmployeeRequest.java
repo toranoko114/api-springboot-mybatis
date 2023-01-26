@@ -23,6 +23,9 @@ import lombok.NoArgsConstructor;
 public class EmployeeRequest {
 
   @NotNull
+  @JsonProperty("employeeId")
+  private String employeeId;
+  @NotNull
   @JsonProperty("employeeName")
   private String employeeName;
   @NotNull

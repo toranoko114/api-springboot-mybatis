@@ -3,7 +3,7 @@
 <mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.PersonalDataMapper">
   <!-- 一括登録 -->
   <insert id="upsert">
-    INSERT INTO PERSONAL_DATA
+    INSERT INTO PERSONAL
     (
       EMPLOYEE_ID,
       BIRTHDAY,

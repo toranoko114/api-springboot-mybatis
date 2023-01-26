@@ -14,7 +14,7 @@ public class HistoryEntity {
 
   private Integer historyId;
   private LocalDate startDate;
-  private Integer employeeId;
+  private String employeeId;
   private Integer departmentId;
   private String content;
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class HistoryDto {
 
   private Integer historyId;
-  private Integer employeeId;
+  private String employeeId;
   private Integer departmentId;
   private LocalDate startDate;
   private String content;

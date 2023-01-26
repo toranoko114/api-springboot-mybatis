@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PersonalDataEntity {
 
-  private Integer employeeId;
+  private String employeeId;
   private LocalDate birthday;
   private String telephoneNumber;
   private String mailAddress;

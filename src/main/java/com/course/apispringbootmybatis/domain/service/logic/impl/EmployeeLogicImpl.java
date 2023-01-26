@@ -59,7 +59,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
 
   @Override
   @Transactional
-  public void deleteById(Integer employeeId) {
+  public void deleteById(String employeeId) {
     employeeMapper.delete(employeeId);
     personalDataMapper.delete(employeeId);
     historyMapper.delete(employeeId);

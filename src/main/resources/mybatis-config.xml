@@ -8,7 +8,7 @@
   </settings>
   <typeAliases>
     <typeAlias alias="EmployeeDto" type="com.course.apispringbootmybatis.domain.dto.EmployeeDto"/>
-    <typeAlias alias="PersonalDataDto" type="com.course.apispringbootmybatis.domain.dto.PersonalDataDto"/>
+    <typeAlias alias="PersonalDto" type="com.course.apispringbootmybatis.domain.dto.PersonalDto"/>
     <typeAlias alias="HistoryDto" type="com.course.apispringbootmybatis.domain.dto.HistoryDto"/>
   </typeAliases>
   <typeHandlers>

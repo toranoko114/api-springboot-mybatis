@@ -8,7 +8,7 @@
     <result property="employeeName" column="EMP_EMPLOYEE_NAME"/>
     <result property="gender" column="EMP_GENDER"/>
     <result property="department" column="EMP_DEPARTMENT_ID" />
-    <association property="personal" javaType="PersonalDataDto">
+    <association property="personal" javaType="PersonalDto">
       <id property="employeeId" column="PD_EMPLOYEE_ID"/>
       <result property="birthday" column="PD_BIRTHDAY"/>
       <result property="telephoneNumber" column="PD_TELEPHONE_NUMBER"/>
@@ -53,15 +53,12 @@
       <include refid="historyColumns"/>
     FROM
       EMPLOYEE EMP
-        LEFT JOIN PERSONAL_DATA PD
+        LEFT JOIN PERSONAL PD
           ON
           EMP.EMPLOYEE_ID = PD.EMPLOYEE_ID
         LEFT JOIN HISTORY HST
           ON
           EMP.EMPLOYEE_ID = HST.EMPLOYEE_ID
-        LEFT JOIN DEPARTMENT DPM
-          ON
-          HST.DEPARTMENT_ID = DPM.DEPARTMENT_ID
   </sql>
 
   <select id="selectById" resultMap="employeeMap">

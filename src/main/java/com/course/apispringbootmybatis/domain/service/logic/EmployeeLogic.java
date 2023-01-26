@@ -33,6 +33,6 @@ public interface EmployeeLogic {
    *
    * @param employeeId 社員ID
    */
-  void deleteById(Integer employeeId);
+  void deleteById(String employeeId);
 
 }

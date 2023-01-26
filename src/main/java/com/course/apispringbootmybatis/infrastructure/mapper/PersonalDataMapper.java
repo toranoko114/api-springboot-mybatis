@@ -1,6 +1,6 @@
 package com.course.apispringbootmybatis.infrastructure.mapper;
 
-import com.course.apispringbootmybatis.domain.dto.PersonalDataDto;
+import com.course.apispringbootmybatis.domain.dto.PersonalDto;
 import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
@@ -19,9 +19,9 @@ public interface PersonalDataMapper {
    * @param employeeId 社員ID
    * @return 社員個人情報
    */
-  @Select("SELECT * FROM PERSONAL_DATA "
+  @Select("SELECT * FROM PERSONAL "
       + "WHERE EMPLOYEE_ID = #{employeeId}")
-  List<PersonalDataDto> selectById(Integer employeeId);
+  List<PersonalDto> selectById(String employeeId);
 
   /**
    * 社員個人情報の登録・更新.
@@ -35,8 +35,8 @@ public interface PersonalDataMapper {
    *
    * @param employeeId 社員ID
    */
-  @Delete("DELETE FROM PERSONAL_DATA WHERE EMPLOYEE_ID = #{employeeId}")
-  void delete(Integer employeeId);
+  @Delete("DELETE FROM PERSONAL WHERE EMPLOYEE_ID = #{employeeId}")
+  void delete(String employeeId);
 
 
 }

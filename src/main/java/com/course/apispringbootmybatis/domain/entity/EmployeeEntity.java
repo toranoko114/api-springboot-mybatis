@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmployeeEntity {
 
-  private Integer employeeId;
+  private String employeeId;
   private String gender;
   private Integer departmentId;
   private String employeeName;

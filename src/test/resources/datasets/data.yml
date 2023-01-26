@@ -3,7 +3,7 @@ employee:
     employee_name: 'テスト'
     gender: 'FEMALE'
 
-personal_data:
+PERSONAL:
   - employee_id: 1
     birthday: '2020-01-01'
     telephone_number: '00000000000'

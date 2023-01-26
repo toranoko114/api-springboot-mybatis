@@ -15,7 +15,7 @@ public interface EmployeeService {
    * @param employeeId 社員ID
    * @return 社員情報
    */
-  EmployeeDto selectById(Integer employeeId);
+  EmployeeDto selectById(String employeeId);
 
   /**
    * 全ての社員情報の取得.
@@ -39,14 +39,14 @@ public interface EmployeeService {
    * @param request    社員情報Dto
    * @return EmployeeDto
    */
-  EmployeeDto update(Integer employeeId, EmployeeRequest request);
+  EmployeeDto update(String employeeId, EmployeeRequest request);
 
   /**
    * 社員IDに該当する社員情報の削除.
    *
    * @param employeeId 社員ID
    */
-  void deleteById(Integer employeeId);
+  void deleteById(String employeeId);
 
 
 }

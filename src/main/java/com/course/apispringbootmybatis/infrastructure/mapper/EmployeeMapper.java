@@ -22,7 +22,7 @@ public interface EmployeeMapper {
    * @param employeeId 社員ID
    * @return 社員情報
    */
-  Optional<EmployeeDto> selectById(@Param("employeeId") Integer employeeId);
+  Optional<EmployeeDto> selectById(@Param("employeeId") String employeeId);
 
   /**
    * 全ての社員情報の取得.
@@ -55,6 +55,6 @@ public interface EmployeeMapper {
    * @param employeeId 社員ID
    */
   @Delete("DELETE FROM EMPLOYEE WHERE EMPLOYEE_ID = #{employeeId}")
-  void delete(Integer employeeId);
+  void delete(String employeeId);
 
 }

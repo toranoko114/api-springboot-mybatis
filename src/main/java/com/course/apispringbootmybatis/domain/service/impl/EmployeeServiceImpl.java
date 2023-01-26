@@ -26,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   private final EmployeeMapper employeeMapper;
 
   @Override
-  public EmployeeDto selectById(Integer employeeId) {
+  public EmployeeDto selectById(String employeeId) {
     return this.employeeMapper.selectById(employeeId)
         .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
   }
@@ -49,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public EmployeeDto update(Integer employeeId, EmployeeRequest request) {
+  public EmployeeDto update(String employeeId, EmployeeRequest request) {
     // 社員が存在する場合のみ後続処理をする
     this.selectById(employeeId);
     // 値の設定
@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public void deleteById(Integer employeeId) {
+  public void deleteById(String employeeId) {
     this.logic.deleteById(employeeId);
   }
 }

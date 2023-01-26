@@ -20,7 +20,7 @@ public interface HistoryMapper {
    * @return 社員履歴情報リスト
    */
   @Select("SELECT * FROM HISTORY WHERE EMPLOYEE_ID = #{employeeId}")
-  List<HistoryDto> selectById(Integer employeeId);
+  List<HistoryDto> selectById(String employeeId);
 
   /**
    * 社員履歴情報リストの一括登録・更新.
@@ -35,6 +35,6 @@ public interface HistoryMapper {
    * @param employeeId 社員ID
    */
   @Delete("DELETE FROM HISTORY WHERE EMPLOYEE_ID = #{employeeId}")
-  void delete(Integer employeeId);
+  void delete(String employeeId);
 
 }

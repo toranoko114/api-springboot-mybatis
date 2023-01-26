@@ -2,11 +2,9 @@ package com.course.apispringbootmybatis.application.controller;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.application.controller.message.EmployeeResponse;
-import com.course.apispringbootmybatis.application.controller.validation.RegexConstants;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +30,7 @@ public class EmployeeController {
 
   @GetMapping("/{employeeId}")
   public EmployeeResponse fetchEmployee(
-      @PathVariable(value = "employeeId")
-      @Pattern(regexp = RegexConstants.EMPLOYEE_ID) Integer employeeId) {
+      @PathVariable(value = "employeeId") String employeeId) {
     return this.modelMapper.map(service.selectById(employeeId), EmployeeResponse.class);
   }
 
@@ -50,17 +47,14 @@ public class EmployeeController {
 
   @PatchMapping("/{employeeId}")
   public EmployeeResponse updateEmployee(
-      @PathVariable(value = "employeeId")
-      @Pattern(regexp = RegexConstants.EMPLOYEE_ID) Integer employeeId,
+      @PathVariable(value = "employeeId") String employeeId,
       @Valid @RequestBody EmployeeRequest request) {
     return this.modelMapper.map(service.update(employeeId, request), EmployeeResponse.class);
   }
 
   @DeleteMapping("/{employeeId}")
   public ResponseEntity<Void> deleteById(
-      @PathVariable(value = "employeeId")
-      @Pattern(regexp = RegexConstants.EMPLOYEE_ID)
-      Integer employeeId) {
+      @PathVariable(value = "employeeId") String employeeId) {
     service.deleteById(employeeId);
     return ResponseEntity.noContent().build();
   }

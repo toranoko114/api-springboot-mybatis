@@ -46,7 +46,7 @@ public class EmployeeResponse {
   public static class PersonalData {
 
     @JsonProperty("employeeId")
-    private Integer employeeId;
+    private String employeeId;
     @JsonProperty("birthday")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -66,7 +66,7 @@ public class EmployeeResponse {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate startDate;
     @JsonProperty("employeeId")
-    private Integer employeeId;
+    private String employeeId;
     @JsonProperty("departmentId")
     private Integer departmentId;
     @JsonProperty("content")

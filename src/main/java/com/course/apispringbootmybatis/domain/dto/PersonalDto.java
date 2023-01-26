@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonalDataDto {
+public class PersonalDto {
 
-  private Integer employeeId;
+  private String employeeId;
   private LocalDate birthday;
   private String telephoneNumber;
   private String mailAddress;
