@@ -5,9 +5,7 @@ import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -32,22 +30,11 @@ public interface EmployeeMapper {
   List<EmployeeDto> selectAll();
 
   /**
-   * 社員情報の登録.
+   * 社員情報の登録または更新.
    *
    * @param employee 社員情報エンティティ
    */
-  @Insert("INSERT INTO EMPLOYEE "
-      + "(DEPARTMENT_ID, EMPLOYEE_NAME, GENDER) "
-      + "VALUES (#{departmentId}, #{employeeName}, #{gender})")
-  @Options(useGeneratedKeys = true, keyProperty = "employeeId")
-  void insert(EmployeeEntity employee);
-
-  /**
-   * 社員IDに該当する社員情報の更新.
-   *
-   * @param employee 社員情報エンティティ
-   */
-  void update(EmployeeEntity employee);
+  void upsert(EmployeeEntity employee);
 
   /**
    * 社員IDに該当する社員情報の削除.

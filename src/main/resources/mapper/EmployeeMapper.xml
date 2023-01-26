@@ -71,6 +71,27 @@
     <include refid="baseSelect"/>
   </select>
 
+  <insert id="upsert">
+    INSERT INTO EMPLOYEE
+    (
+      EMPLOYEE_ID,
+      EMPLOYEE_NAME,
+      DEPARTMENT_ID,
+      GENDER
+    )
+    VALUES
+    (
+      #{employeeId},
+      #{employeeName},
+      #{departmentId},
+      #{gender}
+    )
+    ON DUPLICATE KEY UPDATE
+      EMPLOYEE_NAME = #{employeeId},
+      DEPARTMENT_ID = #{departmentId},
+      GENDER = #{gender}
+  </insert>
+
   <update id="update">
     UPDATE
       EMPLOYEE

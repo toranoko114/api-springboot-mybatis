@@ -6,7 +6,7 @@ import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper;
-import com.course.apispringbootmybatis.infrastructure.mapper.PersonalDataMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.PersonalMapper;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   private final EmployeeMapper employeeMapper;
   private final HistoryMapper historyMapper;
 
-  private final PersonalDataMapper personalDataMapper;
+  private final PersonalMapper personalMapper;
 
   /**
    * 社員情報を登録する.
@@ -36,10 +36,9 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   public void insert(EmployeeEntity employee, PersonalDataEntity personal,
       List<HistoryEntity> historyList) {
     //社員テーブルに追加
-    employeeMapper.insert(employee);
+    employeeMapper.upsert(employee);
     // 個人情報テーブルに追加
-    personal.setEmployeeId(employee.getEmployeeId());
-    personalDataMapper.upsert(personal);
+    personalMapper.upsert(personal);
     //履歴テーブルに追加
     historyList.forEach(history -> history.setEmployeeId(employee.getEmployeeId()));
     historyMapper.bulkUpsert(historyList);
@@ -50,9 +49,9 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   public void update(EmployeeEntity employee, PersonalDataEntity personal,
       List<HistoryEntity> historyList) {
     //社員テーブルに追加
-    employeeMapper.update(employee);
+    employeeMapper.upsert(employee);
     // 個人情報テーブルに追加
-    personalDataMapper.upsert(personal);
+    personalMapper.upsert(personal);
     //履歴テーブルに追加
     historyMapper.bulkUpsert(historyList);
   }
@@ -61,7 +60,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   @Transactional
   public void deleteById(String employeeId) {
     employeeMapper.delete(employeeId);
-    personalDataMapper.delete(employeeId);
+    personalMapper.delete(employeeId);
     historyMapper.delete(employeeId);
   }
 }
