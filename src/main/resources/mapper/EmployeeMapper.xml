@@ -15,10 +15,10 @@
       <result property="mailAddress" column="PD_MAIL_ADDRESS"/>
     </association>
     <collection property="historyList" ofType="HistoryDto">
-      <id property="historyId" column="HST_HISTORY_ID"/>
-      <result property="startDate" column="HST_START_DATE"/>
-      <result property="employeeId" column="HST_EMPLOYEE_ID"/>
-      <result property="departmentId" column="HST_DEPARTMENT_ID"/>
+      <!-- 複合主キー -->
+      <id property="startDate" column="HST_START_DATE"/>
+      <id property="employeeId" column="HST_EMPLOYEE_ID"/>
+      <id property="departmentId" column="HST_DEPARTMENT_ID"/>
       <result property="content" column="HST_CONTENT"/>
     </collection>
   </resultMap>
@@ -37,7 +37,6 @@
     PD.MAIL_ADDRESS as PD_MAIL_ADDRESS,
   </sql>
   <sql id="historyColumns">
-    HST.HISTORY_ID as HST_HISTORY_ID,
     HST.START_DATE as HST_START_DATE,
     HST.EMPLOYEE_ID as HST_EMPLOYEE_ID,
     HST.DEPARTMENT_ID as HST_DEPARTMENT_ID,

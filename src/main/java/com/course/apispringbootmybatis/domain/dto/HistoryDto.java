@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HistoryDto {
 
-  private Integer historyId;
   private String employeeId;
   private Integer departmentId;
   private LocalDate startDate;
