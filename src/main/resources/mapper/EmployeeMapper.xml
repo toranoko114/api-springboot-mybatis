@@ -86,20 +86,9 @@
       #{gender}
     )
     ON DUPLICATE KEY UPDATE
-      EMPLOYEE_NAME = #{employeeId},
-      DEPARTMENT_ID = #{departmentId},
-      GENDER = #{gender}
+      EMPLOYEE_NAME = VALUES(EMPLOYEE_NAME),
+      DEPARTMENT_ID = VALUES(DEPARTMENT_ID),
+      GENDER = VALUES(GENDER)
   </insert>
-
-  <update id="update">
-    UPDATE
-      EMPLOYEE
-    SET
-      DEPARTMENT_ID = #{departmentId},
-      EMPLOYEE_NAME = #{employeeName},
-      GENDER = #{gender}
-    WHERE
-      EMPLOYEE_ID = #{employeeId}
-  </update>
 
 </mapper>
