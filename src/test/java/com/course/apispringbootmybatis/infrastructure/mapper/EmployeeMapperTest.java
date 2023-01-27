@@ -72,9 +72,9 @@ class EmployeeMapperTest {
         .mailAddress("test2@gmail.com").build();
 
     @Test
-    @DisplayName("社員情報検索（ID指定）")
-    @DataSet("datasets/EmployeeMapperTest/select_input_data.yml")
-    void selectById() {
+    @DisplayName("社員情報ID検索-該当レコードあり")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    void selectById_exist_record() {
       // arrange
       var expected = Optional.of(
           EmployeeDto.builder()
@@ -93,9 +93,21 @@ class EmployeeMapperTest {
     }
 
     @Test
-    @DisplayName("社員情報全件検索")
-    @DataSet("datasets/EmployeeMapperTest/select_input_data.yml")
-    void selectAll() {
+    @DisplayName("社員情報ID検索-該当レコードなし")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    void selectById_no_record() {
+      // arrange
+      var expected = Optional.empty();
+      // act
+      var actual = target.selectById("notExist");
+      // assert
+      Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("社員情報全件検索-レコードあり")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    void selectAll_exist_record() {
       // arrange
       var expected = List.of(
           EmployeeDto.builder()
@@ -120,6 +132,17 @@ class EmployeeMapperTest {
       // assert
       Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    @DisplayName("社員情報全件検索-レコードなし")
+    void selectAll_no_record() {
+      // arrange
+      var expected = List.of();
+      // act
+      var actual = target.selectAll();
+      // assert
+      Assertions.assertEquals(expected, actual);
+    }
   }
 
   @Nested
@@ -128,8 +151,9 @@ class EmployeeMapperTest {
   class upsert {
 
     @Test
-    @DataSet("datasets/EmployeeMapperTest/upsert_input_data.yml")
-    @ExpectedDataSet(value = "datasets/EmployeeMapperTest/upsert_output_data.yml",
+    @DisplayName("社員情報登録")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @ExpectedDataSet(value = "datasets/EmployeeMapperTest/insert_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void insert() {
       // arrange
@@ -143,7 +167,50 @@ class EmployeeMapperTest {
       target.upsert(entity);
     }
 
+    @Test
+    @DisplayName("社員情報更新")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @ExpectedDataSet(value = "datasets/EmployeeMapperTest/update_output_data.yml",
+        orderBy = {"employee_id", "department_id"})
+    void update() {
+      // arrange
+      var entity = EmployeeEntity.builder()
+          .employeeId("test2")
+          .employeeName("更新テスト")
+          .departmentId(1)
+          .gender("FEMALE")
+          .build();
+      // act
+      target.upsert(entity);
+    }
+
   }
 
+  @Nested
+  @DisplayName("削除テストクラス")
+  @TestInstance(Lifecycle.PER_CLASS)
+  class delete {
+
+    @Test
+    @DisplayName("社員情報削除-該当レコードあり")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @ExpectedDataSet(value = "datasets/EmployeeMapperTest/delete_exist_record_output_data.yml",
+        orderBy = {"employee_id", "department_id"})
+    void delete_exist_record() {
+      // act
+      target.delete("test2");
+    }
+
+    @Test
+    @DisplayName("社員情報削除-該当レコードなし")
+    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @ExpectedDataSet(value = "datasets/EmployeeMapperTest/delete_no_record_output_data.yml",
+        orderBy = {"employee_id", "department_id"})
+    void delete_no_record() {
+      // act
+      target.delete("test3");
+    }
+
+  }
 
 }
