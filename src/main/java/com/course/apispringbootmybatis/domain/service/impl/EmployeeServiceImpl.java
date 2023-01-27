@@ -5,7 +5,7 @@ import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundExc
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
-import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
+import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public EmployeeDto create(EmployeeRequest request) {
     var employee = this.modelMapper.map(request, EmployeeEntity.class);
-    var personal = this.modelMapper.map(request, PersonalDataEntity.class);
+    var personal = this.modelMapper.map(request, PersonalEntity.class);
     var historyList = List.of(
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
     // 社員情報の登録（トランザクション）
@@ -55,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     // 値の設定
     var employee = this.modelMapper.map(request, EmployeeEntity.class);
     employee.setEmployeeId(employeeId);
-    var personal = this.modelMapper.map(request, PersonalDataEntity.class);
+    var personal = this.modelMapper.map(request, PersonalEntity.class);
     personal.setEmployeeId(employeeId);
     var historyList = List.of(
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));

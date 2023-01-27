@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonalDataEntity {
+public class PersonalEntity {
 
   private String employeeId;
   private LocalDate birthday;

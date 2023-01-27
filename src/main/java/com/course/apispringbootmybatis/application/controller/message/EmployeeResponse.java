@@ -26,7 +26,7 @@ public class EmployeeResponse {
   @JsonProperty("department")
   private Department department;
   @JsonProperty("personal")
-  private PersonalData personal;
+  private Personal personal;
 
   @JsonProperty("historyList")
   private List<History> historyList;
@@ -43,7 +43,7 @@ public class EmployeeResponse {
   }
 
   @Data
-  public static class PersonalData {
+  public static class Personal {
 
     @JsonProperty("employeeId")
     private String employeeId;

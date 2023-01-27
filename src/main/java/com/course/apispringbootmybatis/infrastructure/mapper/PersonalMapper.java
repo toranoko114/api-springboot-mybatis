@@ -1,11 +1,11 @@
 package com.course.apispringbootmybatis.infrastructure.mapper;
 
-import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
+import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * PersonalDataテーブル Mapperクラス
+ * Personalテーブル Mapperクラス
  */
 @Mapper
 public interface PersonalMapper {
@@ -15,7 +15,7 @@ public interface PersonalMapper {
    *
    * @param personal 社員個人情報
    */
-  void upsert(PersonalDataEntity personal);
+  void upsert(PersonalEntity personal);
 
   /**
    * 社員IDに該当する社員個人情報の削除.

@@ -2,7 +2,7 @@ package com.course.apispringbootmybatis.domain.service.logic;
 
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
-import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
+import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public interface EmployeeLogic {
    * @param personal 社員個人情報
    * @param history  社員履歴情報
    */
-  void insert(EmployeeEntity employee, PersonalDataEntity personal, List<HistoryEntity> history);
+  void insert(EmployeeEntity employee, PersonalEntity personal, List<HistoryEntity> history);
 
   /**
    * 社員の各種情報の更新.
@@ -26,7 +26,7 @@ public interface EmployeeLogic {
    * @param personal 社員個人情報
    * @param history  社員履歴情報
    */
-  void update(EmployeeEntity employee, PersonalDataEntity personal, List<HistoryEntity> history);
+  void update(EmployeeEntity employee, PersonalEntity personal, List<HistoryEntity> history);
 
   /**
    * 社員IDに該当する社員情報の削除.

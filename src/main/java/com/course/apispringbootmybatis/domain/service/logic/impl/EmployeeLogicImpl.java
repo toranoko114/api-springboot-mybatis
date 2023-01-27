@@ -2,7 +2,7 @@ package com.course.apispringbootmybatis.domain.service.logic.impl;
 
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
-import com.course.apispringbootmybatis.domain.entity.PersonalDataEntity;
+import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper;
@@ -33,7 +33,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
    */
   @Override
   @Transactional
-  public void insert(EmployeeEntity employee, PersonalDataEntity personal,
+  public void insert(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
     //社員テーブルに追加
     employeeMapper.upsert(employee);
@@ -46,7 +46,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
 
   @Override
   @Transactional
-  public void update(EmployeeEntity employee, PersonalDataEntity personal,
+  public void update(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
     //社員テーブルに追加
     employeeMapper.upsert(employee);
