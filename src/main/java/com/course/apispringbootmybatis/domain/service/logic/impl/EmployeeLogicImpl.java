@@ -21,26 +21,14 @@ public class EmployeeLogicImpl implements EmployeeLogic {
 
   private final EmployeeMapper employeeMapper;
   private final HistoryMapper historyMapper;
-
   private final PersonalMapper personalMapper;
 
-  /**
-   * 社員情報を登録する.
-   *
-   * @param employee    社員
-   * @param personal    個人情報
-   * @param historyList 履歴リスト
-   */
   @Override
   @Transactional
   public void insert(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
-    //社員テーブルに追加
     employeeMapper.upsert(employee);
-    // 個人情報テーブルに追加
     personalMapper.upsert(personal);
-    //履歴テーブルに追加
-    historyList.forEach(history -> history.setEmployeeId(employee.getEmployeeId()));
     historyMapper.bulkUpsert(historyList);
   }
 
@@ -48,11 +36,8 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   @Transactional
   public void update(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
-    //社員テーブルに追加
     employeeMapper.upsert(employee);
-    // 個人情報テーブルに追加
     personalMapper.upsert(personal);
-    //履歴テーブルに追加
     historyMapper.bulkUpsert(historyList);
   }
 

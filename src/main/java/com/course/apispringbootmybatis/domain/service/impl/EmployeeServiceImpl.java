@@ -38,21 +38,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public EmployeeDto create(EmployeeRequest request) {
+
+    // Entity変換
     var employee = this.modelMapper.map(request, EmployeeEntity.class);
     var personal = this.modelMapper.map(request, PersonalEntity.class);
     var historyList = List.of(
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
+    historyList.forEach(history -> history.setEmployeeId(request.getEmployeeId()));
+
     // 社員情報の登録（トランザクション）
     this.logic.insert(employee, personal, historyList);
+
     // 登録した情報を検索して返却
     return this.selectById(employee.getEmployeeId());
   }
 
   @Override
   public EmployeeDto update(String employeeId, EmployeeRequest request) {
+
     // 社員が存在する場合のみ後続処理をする
     this.selectById(employeeId);
-    // 値の設定
+
+    // Entity変換
     var employee = this.modelMapper.map(request, EmployeeEntity.class);
     employee.setEmployeeId(employeeId);
     var personal = this.modelMapper.map(request, PersonalEntity.class);
@@ -60,9 +67,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     var historyList = List.of(
         this.modelMapper.map(request.getHistoryList(), HistoryEntity[].class));
     historyList.forEach(history -> history.setEmployeeId(employeeId));
+
     // 社員情報の更新（トランザクション）
     this.logic.update(employee, personal, historyList);
 
+    // 更新した情報を検索して返却
     return this.selectById(employeeId);
   }
 
