@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     historyList.forEach(history -> history.setEmployeeId(request.getEmployeeId()));
 
     // 社員情報の登録（トランザクション）
-    this.logic.insert(employee, personal, historyList);
+    this.logic.upsert(employee, personal, historyList);
 
     // 登録した情報を検索して返却
     return this.selectById(employee.getEmployeeId());
@@ -69,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     historyList.forEach(history -> history.setEmployeeId(employeeId));
 
     // 社員情報の更新（トランザクション）
-    this.logic.update(employee, personal, historyList);
+    this.logic.upsert(employee, personal, historyList);
 
     // 更新した情報を検索して返却
     return this.selectById(employeeId);

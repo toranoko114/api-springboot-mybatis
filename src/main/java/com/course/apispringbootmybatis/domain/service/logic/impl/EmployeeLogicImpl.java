@@ -25,16 +25,7 @@ public class EmployeeLogicImpl implements EmployeeLogic {
 
   @Override
   @Transactional
-  public void insert(EmployeeEntity employee, PersonalEntity personal,
-      List<HistoryEntity> historyList) {
-    employeeMapper.upsert(employee);
-    personalMapper.upsert(personal);
-    historyMapper.bulkUpsert(historyList);
-  }
-
-  @Override
-  @Transactional
-  public void update(EmployeeEntity employee, PersonalEntity personal,
+  public void upsert(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
     employeeMapper.upsert(employee);
     personalMapper.upsert(personal);
