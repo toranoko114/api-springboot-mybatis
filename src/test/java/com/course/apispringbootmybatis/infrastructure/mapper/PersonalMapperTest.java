@@ -29,7 +29,7 @@ class PersonalMapperTest {
 
     @Test
     @DisplayName("社員個人情報登録")
-    @DataSet("datasets/PersonalMapperTest/input_data.yml")
+    @DataSet(value = "datasets/PersonalMapperTest/input_data.yml",cleanBefore = true)
     @ExpectedDataSet(value = "datasets/PersonalMapperTest/insert_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void insert() {
@@ -46,7 +46,7 @@ class PersonalMapperTest {
 
     @Test
     @DisplayName("社員個人情報更新")
-    @DataSet("datasets/PersonalMapperTest/input_data.yml")
+    @DataSet(value = "datasets/PersonalMapperTest/input_data.yml",cleanBefore = true)
     @ExpectedDataSet(value = "datasets/PersonalMapperTest/update_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void update() {
@@ -71,7 +71,7 @@ class PersonalMapperTest {
 
     @Test
     @DisplayName("社員個人情報削除-該当レコードあり")
-    @DataSet("datasets/PersonalMapperTest/input_data.yml")
+    @DataSet(value = "datasets/PersonalMapperTest/input_data.yml",cleanBefore = true)
     @ExpectedDataSet(value = "datasets/PersonalMapperTest/delete_exist_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_exist_record() {
@@ -81,7 +81,7 @@ class PersonalMapperTest {
 
     @Test
     @DisplayName("社員個人情報削除-該当レコードなし")
-    @DataSet("datasets/PersonalMapperTest/input_data.yml")
+    @DataSet(value = "datasets/PersonalMapperTest/input_data.yml",cleanBefore = true)
     @ExpectedDataSet(value = "datasets/PersonalMapperTest/delete_no_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_no_record() {

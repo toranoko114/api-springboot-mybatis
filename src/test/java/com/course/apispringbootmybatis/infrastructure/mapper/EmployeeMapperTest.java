@@ -13,12 +13,15 @@ import com.github.database.rider.spring.api.DBRider;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,7 +29,11 @@ import org.springframework.test.context.ActiveProfiles;
 @DBRider
 @ActiveProfiles("test")
 @MybatisTest
+@ExtendWith(SoftAssertionsExtension.class)
 class EmployeeMapperTest {
+
+  @InjectSoftAssertions
+  private SoftAssertions softy;
 
   @Autowired
   private EmployeeMapper target;
@@ -73,7 +80,7 @@ class EmployeeMapperTest {
 
     @Test
     @DisplayName("社員情報ID検索-該当レコードあり")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     void selectById_exist_record() {
       // arrange
       var expected = Optional.of(
@@ -89,24 +96,24 @@ class EmployeeMapperTest {
       // act
       var actual = target.selectById("test");
       // assert
-      Assertions.assertEquals(expected, actual);
+      softy.assertThat(actual).as("selectById_exist_record: database compare").isEqualTo(expected);
     }
 
     @Test
     @DisplayName("社員情報ID検索-該当レコードなし")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     void selectById_no_record() {
       // arrange
       var expected = Optional.empty();
       // act
       var actual = target.selectById("notExist");
       // assert
-      Assertions.assertEquals(expected, actual);
+      softy.assertThat(actual).as("selectById_no_record: database compare").isEqualTo(expected);
     }
 
     @Test
     @DisplayName("社員情報全件検索-レコードあり")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     void selectAll_exist_record() {
       // arrange
       var expected = List.of(
@@ -130,18 +137,19 @@ class EmployeeMapperTest {
       // act
       var actual = target.selectAll();
       // assert
-      Assertions.assertEquals(expected, actual);
+      softy.assertThat(actual).as("selectAll_exist_record: database compare").isEqualTo(expected);
     }
 
     @Test
     @DisplayName("社員情報全件検索-レコードなし")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_no_data.yml", cleanBefore = true)
     void selectAll_no_record() {
       // arrange
       var expected = List.of();
       // act
       var actual = target.selectAll();
       // assert
-      Assertions.assertEquals(expected, actual);
+      softy.assertThat(actual).as("selectAll_no_record: database compare").isEqualTo(expected);
     }
   }
 
@@ -152,7 +160,7 @@ class EmployeeMapperTest {
 
     @Test
     @DisplayName("社員情報登録")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/EmployeeMapperTest/insert_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void insert() {
@@ -169,7 +177,7 @@ class EmployeeMapperTest {
 
     @Test
     @DisplayName("社員情報更新")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/EmployeeMapperTest/update_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void update() {
@@ -193,7 +201,7 @@ class EmployeeMapperTest {
 
     @Test
     @DisplayName("社員情報削除-該当レコードあり")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/EmployeeMapperTest/delete_exist_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_exist_record() {
@@ -203,7 +211,7 @@ class EmployeeMapperTest {
 
     @Test
     @DisplayName("社員情報削除-該当レコードなし")
-    @DataSet("datasets/EmployeeMapperTest/input_data.yml")
+    @DataSet(value = "datasets/EmployeeMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/EmployeeMapperTest/delete_no_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_no_record() {

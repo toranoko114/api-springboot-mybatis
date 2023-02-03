@@ -30,7 +30,7 @@ class HistoryMapperTest {
 
     @Test
     @DisplayName("社員履歴情報登録")
-    @DataSet("datasets/HistoryMapperTest/input_data.yml")
+    @DataSet(value = "datasets/HistoryMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/HistoryMapperTest/bulkInsert_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void bulkInsert() {
@@ -54,7 +54,7 @@ class HistoryMapperTest {
 
     @Test
     @DisplayName("社員履歴情報更新")
-    @DataSet("datasets/HistoryMapperTest/input_data.yml")
+    @DataSet(value = "datasets/HistoryMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/HistoryMapperTest/bulkUpdate_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void bulkUpsert() {
@@ -85,7 +85,7 @@ class HistoryMapperTest {
 
     @Test
     @DisplayName("社員履歴情報削除-該当レコードあり")
-    @DataSet("datasets/HistoryMapperTest/input_data.yml")
+    @DataSet(value = "datasets/HistoryMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/HistoryMapperTest/delete_exist_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_exist_record() {
@@ -95,7 +95,7 @@ class HistoryMapperTest {
 
     @Test
     @DisplayName("社員履歴情報削除-該当レコードなし")
-    @DataSet("datasets/HistoryMapperTest/input_data.yml")
+    @DataSet(value = "datasets/HistoryMapperTest/input_data.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/HistoryMapperTest/delete_no_record_output_data.yml",
         orderBy = {"employee_id", "department_id"})
     void delete_no_record() {
