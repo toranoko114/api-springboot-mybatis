@@ -10,6 +10,7 @@ import com.course.apispringbootmybatis.infrastructure.mapper.PersonalMapper;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,8 +24,16 @@ public class EmployeeLogicImpl implements EmployeeLogic {
   private final HistoryMapper historyMapper;
   private final PersonalMapper personalMapper;
 
+  /**
+   * 登録更新トランザクション（新規トランザクションを生成する）
+   *
+   * @param employee    社員情報
+   * @param personal    社員個人情報
+   * @param historyList 社員履歴情報
+   * @see "https://spring.pleiades.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html"
+   */
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.NESTED)
   public void upsert(EmployeeEntity employee, PersonalEntity personal,
       List<HistoryEntity> historyList) {
     employeeMapper.upsert(employee);
@@ -32,8 +41,14 @@ public class EmployeeLogicImpl implements EmployeeLogic {
     historyMapper.bulkUpsert(historyList);
   }
 
+  /**
+   * 削除トランザクション（新規トランザクションを生成する）
+   *
+   * @param employeeId 社員ID
+   * @see "https://spring.pleiades.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html"
+   */
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.NESTED)
   public void deleteById(String employeeId) {
     employeeMapper.delete(employeeId);
     personalMapper.delete(employeeId);

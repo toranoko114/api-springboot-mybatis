@@ -29,7 +29,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -41,9 +40,17 @@ class EmployeeLogicImplTest {
 
   @InjectSoftAssertions
   private SoftAssertions softy;
+  @SpyBean // ( @Spy + @Autowired )
+  private EmployeeLogicImpl target;
+  @SpyBean
+  private EmployeeMapper employeeMapper;
+  @SpyBean
+  private HistoryMapper historyMapper;
+  @SpyBean
+  private PersonalMapper personalMapper;
 
   /**
-   * クラス共通で利用するEntity
+   * クラスで利用する共通Entity
    */
   EmployeeEntity employee = EmployeeEntity.builder().employeeId("test2").employeeName("テスト2")
       .departmentId(4).gender("MALE").build();
@@ -56,24 +63,20 @@ class EmployeeLogicImplTest {
       HistoryEntity.builder().employeeId("test2").startDate(LocalDate.of(2022, 2, 2))
           .departmentId(4).content("テスト2入社").build());
 
+  /**
+   * テストメソッド実行前にMockを初期化する 実行順序変更によるJUnitテスト失敗を防ぐため
+   */
+  @BeforeEach
+  public void doBeforeEach() {
+    Mockito.reset(employeeMapper);
+    Mockito.reset(historyMapper);
+    Mockito.reset(personalMapper);
+  }
 
   @Nested
   @TestInstance(Lifecycle.PER_CLASS)
   @DisplayName("トランザクション-正常系")
   class transactionNormal {
-
-    private EmployeeLogicImpl target;
-    @Autowired
-    private EmployeeMapper employeeMapper;
-    @Autowired
-    private HistoryMapper historyMapper;
-    @Autowired
-    private PersonalMapper personalMapper;
-
-    @BeforeEach
-    public void beforeEach() {
-      target = new EmployeeLogicImpl(employeeMapper, historyMapper, personalMapper);
-    }
 
     @Test
     @DisplayName("トランザクション-正常系-登録")
@@ -162,23 +165,13 @@ class EmployeeLogicImplTest {
   @DisplayName("トランザクション-異常系")
   class transactionAbnormal {
 
-    @SpyBean
-    private EmployeeLogicImpl target;
-    @SpyBean
-    private EmployeeMapper employeeMapper;
-    @SpyBean
-    private PersonalMapper personalMapper;
-    @SpyBean
-    private HistoryMapper historyMapper;
-
     @Test
     @DisplayName("トランザクション-異常系-Employee登録時にエラー")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
     void upsert_employeeMapper_Error() {
 
-      // EmployeeMapper更新処理が呼ばれたら例外が投げられるよう設定
+      // arrange
       Mockito.doThrow(new RuntimeException()).when(employeeMapper).upsert(employee);
-
       var expected = employeeMapper.selectAll();
 
       // act
@@ -191,13 +184,13 @@ class EmployeeLogicImplTest {
       var actual = employeeMapper.selectAll();
 
       softy.assertThatCode(
-          () -> Mockito.verify(this.employeeMapper, Mockito.times(1)).upsert(any())
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).upsert(any())
       ).as("EmployeeMapper#upsert() is called").doesNotThrowAnyException();
       softy.assertThatCode(
-          () -> Mockito.verify(this.personalMapper, Mockito.times(0)).upsert(any())
+          () -> Mockito.verify(personalMapper, Mockito.times(0)).upsert(any())
       ).as("PersonalMapper#upsert() is called").doesNotThrowAnyException();
       softy.assertThatCode(
-          () -> Mockito.verify(this.historyMapper, Mockito.times(0)).bulkUpsert(any())
+          () -> Mockito.verify(historyMapper, Mockito.times(0)).bulkUpsert(any())
       ).as("HistoryMapper#upsert() is called").doesNotThrowAnyException();
       softy.assertThat(actual).as("upsert_employeeMapper_Error: database compare")
           .isEqualTo(expected);
@@ -208,9 +201,8 @@ class EmployeeLogicImplTest {
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
     void upsert_personalMapper_Error() {
 
-      // EmployeeMapper更新処理が呼ばれたら例外が投げられるよう設定
-      Mockito.doThrow(new NullPointerException()).when(personalMapper).upsert(personal);
-
+      // arrange
+      Mockito.doThrow(new RuntimeException()).when(personalMapper).upsert(personal);
       var expected = employeeMapper.selectAll();
 
       // act
@@ -222,18 +214,144 @@ class EmployeeLogicImplTest {
       // assert
       var actual = employeeMapper.selectAll();
 
-//      softy.assertThatCode(
-//          () -> Mockito.verify(this.employeeMapper, Mockito.times(1)).upsert(any())
-//      ).as("EmployeeMapper#upsert() is called").doesNotThrowAnyException();
-//      softy.assertThatCode(
-//          () -> Mockito.verify(this.personalMapper, Mockito.times(1)).upsert(any())
-//      ).as("PersonalMapper#upsert() is called").doesNotThrowAnyException();
-//      softy.assertThatCode(
-//          () -> Mockito.verify(this.historyMapper, Mockito.times(0)).bulkUpsert(any())
-//      ).as("HistoryMapper#upsert() is called").doesNotThrowAnyException();
-////      softy.assertThat(actual).as("upsert_personalMapper_Error: database compare")
-////          .isEqualTo(expected);
+      softy.assertThatCode(
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).upsert(any())
+      ).as("EmployeeMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(personalMapper, Mockito.times(1)).upsert(any())
+      ).as("PersonalMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(historyMapper, Mockito.times(0)).bulkUpsert(any())
+      ).as("HistoryMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThat(actual).as("upsert_personalMapper_Error: database compare")
+          .isEqualTo(expected);
     }
+
+    @Test
+    @DisplayName("トランザクション-異常系-History登録時にエラー")
+    @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
+    void upsert_historyMapper_Error() {
+
+      // arrange
+      Mockito.doThrow(new RuntimeException()).when(historyMapper).bulkUpsert(history);
+      var expected = employeeMapper.selectAll();
+
+      // act
+      try {
+        target.upsert(employee, personal, history);
+      } catch (RuntimeException e) {
+        // テストのために素通りさせる
+      }
+      // assert
+      var actual = employeeMapper.selectAll();
+
+      softy.assertThatCode(
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).upsert(any())
+      ).as("EmployeeMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(personalMapper, Mockito.times(1)).upsert(any())
+      ).as("PersonalMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(historyMapper, Mockito.times(1)).bulkUpsert(any())
+      ).as("HistoryMapper#upsert() is called").doesNotThrowAnyException();
+      softy.assertThat(actual).as("upsert_personalMapper_Error: database compare")
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("トランザクション-異常系-Employee削除時にエラー")
+    @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
+    void delete_employeeMapper_Error() {
+
+      // arrange
+      Mockito.doThrow(new RuntimeException()).when(employeeMapper).delete("test");
+      var expected = employeeMapper.selectAll();
+
+      // act
+      try {
+        target.deleteById("test");
+      } catch (RuntimeException e) {
+        // テストのために素通りさせる
+      }
+      // assert
+      var actual = employeeMapper.selectAll();
+
+      softy.assertThatCode(
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).delete(any())
+      ).as("EmployeeMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(personalMapper, Mockito.times(0)).delete(any())
+      ).as("PersonalMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(historyMapper, Mockito.times(0)).delete(any())
+      ).as("HistoryMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThat(actual).as("delete_employeeMapper_Error: database compare")
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("トランザクション-異常系-Personal削除時にエラー")
+    @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
+    void delete_personalMapper_Error() {
+
+      // arrange
+      Mockito.doThrow(new RuntimeException()).when(personalMapper).delete("test");
+      var expected = employeeMapper.selectAll();
+
+      // act
+      try {
+        target.deleteById("test");
+      } catch (RuntimeException e) {
+        // テストのために素通りさせる
+      }
+      // assert
+      var actual = employeeMapper.selectAll();
+
+      softy.assertThatCode(
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).delete(any())
+      ).as("EmployeeMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(personalMapper, Mockito.times(1)).delete(any())
+      ).as("PersonalMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(historyMapper, Mockito.times(0)).delete(any())
+      ).as("HistoryMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThat(actual).as("delete_personalMapper_Error: database compare")
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("トランザクション-異常系-History削除時にエラー")
+    @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
+    void delete_historyMapper_Error() {
+
+      // arrange
+      Mockito.doThrow(new RuntimeException()).when(historyMapper).delete("test");
+      var expected = employeeMapper.selectAll();
+
+      // act
+      try {
+        target.deleteById("test");
+      } catch (RuntimeException e) {
+        // テストのために素通りさせる
+      }
+      // assert
+      var actual = employeeMapper.selectAll();
+
+      softy.assertThatCode(
+          () -> Mockito.verify(employeeMapper, Mockito.times(1)).delete(any())
+      ).as("EmployeeMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(personalMapper, Mockito.times(1)).delete(any())
+      ).as("PersonalMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThatCode(
+          () -> Mockito.verify(historyMapper, Mockito.times(1)).delete(any())
+      ).as("HistoryMapper#delete() is called").doesNotThrowAnyException();
+      softy.assertThat(actual).as("delete_historyMapper_Error: database compare")
+          .isEqualTo(expected);
+    }
+
+
   }
 
 }
