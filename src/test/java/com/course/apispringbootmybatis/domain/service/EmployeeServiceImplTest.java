@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+@DBRider
 @MybatisTest
 @ActiveProfiles("test")
 @Import({EmployeeServiceImpl.class, EmployeeLogicImpl.class})
@@ -34,14 +35,11 @@ class EmployeeServiceImplTest {
   private EmployeeLogic logic;
 
   @Test
-  @DBRider
   @DisplayName("正常系-検索結果なし")
   @DataSet("datasets/EmployeeServiceImplTest/input_data.yml")
   void select_no_record() {
     // act
-    var actual = catchThrowable(() -> {
-      this.target.selectById("test01");
-    });
+    var actual = catchThrowable(() -> this.target.selectById("test01"));
     // assert
     assertThat(actual).isInstanceOf(EmployeeNotFoundException.class)
         .hasMessage("Employee not found with employeeId:test01");

@@ -102,7 +102,5 @@ class HistoryMapperTest {
       // act
       target.delete("test3");
     }
-
   }
-
 }

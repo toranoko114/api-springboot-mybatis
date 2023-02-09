@@ -17,6 +17,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -27,6 +28,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -49,19 +53,23 @@ class EmployeeLogicImplTest {
   @SpyBean
   private PersonalMapper personalMapper;
 
-  /**
-   * クラスで利用する共通Entity
-   */
-  EmployeeEntity employee = EmployeeEntity.builder().employeeId("test2").employeeName("テスト2")
-      .departmentId(4).gender("MALE").build();
+  private static final String PROVIDER_PATH =
+      "com.course.apispringbootmybatis.domain.service.logic.impl.EmployeeLogicImplTest#provider_entity";
 
-  PersonalEntity personal = PersonalEntity.builder().employeeId("test2")
-      .birthday(LocalDate.of(2020, 2, 2))
-      .telephoneNumber("00000000002").mailAddress("test2@gmail.com").build();
-
-  List<HistoryEntity> history = List.of(
-      HistoryEntity.builder().employeeId("test2").startDate(LocalDate.of(2022, 2, 2))
-          .departmentId(4).content("テスト2入社").build());
+  private static Stream<Arguments> provider_entity() {
+    return Stream.of(
+        Arguments.of(
+            EmployeeEntity.builder().employeeId("test2").employeeName("テスト2")
+                .departmentId(4).gender("MALE").build(),
+            PersonalEntity.builder().employeeId("test2")
+                .birthday(LocalDate.of(2020, 2, 2))
+                .telephoneNumber("00000000002").mailAddress("test2@gmail.com").build(),
+            List.of(
+                HistoryEntity.builder().employeeId("test2").startDate(LocalDate.of(2022, 2, 2))
+                    .departmentId(4).content("テスト2入社").build())
+        )
+    );
+  }
 
   /**
    * テストメソッド実行前にMockを初期化する 実行順序変更によるJUnitテスト失敗を防ぐため
@@ -78,72 +86,29 @@ class EmployeeLogicImplTest {
   @DisplayName("トランザクション-正常系")
   class transactionNormal {
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("provider_insert")
     @DisplayName("トランザクション-正常系-登録")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
-    void insert() {
-
-      var expectedEmployee1 = EmployeeDto.builder().employeeId("test")
-          .department(Department.INDEPENDENT).employeeName("テスト").gender(Gender.FEMALE).personal(
-              PersonalDto.builder().employeeId("test").birthday(LocalDate.of(2020, 1, 1))
-                  .telephoneNumber("00000000001").mailAddress("test@gmail.com").build())
-          .historyList(List.of(
-              HistoryDto.builder().employeeId("test").startDate(LocalDate.of(2022, 1, 1))
-                  .departmentId(2).content("テスト入社").build(),
-              HistoryDto.builder().employeeId("test").startDate(LocalDate.of(2023, 1, 1))
-                  .departmentId(1).content("テスト退職").build())).build();
-
-      var expectedEmployee2 = EmployeeDto.builder().employeeId("test2")
-          .department(Department.DEVELOPMENT).employeeName("テスト2").gender(Gender.MALE).personal(
-              PersonalDto.builder().employeeId("test2").birthday(LocalDate.of(2020, 2, 2))
-                  .telephoneNumber("00000000002").mailAddress("test2@gmail.com").build())
-          .historyList(List.of(
-              HistoryDto.builder().employeeId("test2").startDate(LocalDate.of(2022, 2, 2))
-                  .departmentId(4).content("テスト2入社").build())).build();
-
+    void insert(EmployeeEntity employee, PersonalEntity personal, List<HistoryEntity> history,
+        List<EmployeeDto> expected) {
       // act
       target.upsert(employee, personal, history);
       // assert
       var actual = employeeMapper.selectAll();
-      var expected = List.of(expectedEmployee1, expectedEmployee2);
       softy.assertThat(actual).as("transactionNormal_insert: database compare").isEqualTo(expected);
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("provider_update")
     @DisplayName("トランザクション-正常系-更新")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
-    void update() {
-      // arrange
-      var employee = EmployeeEntity.builder().employeeId("test").employeeName("テスト更新")
-          .departmentId(3).gender("MALE").build();
-
-      var personal = PersonalEntity.builder().employeeId("test").birthday(LocalDate.of(2020, 1, 1))
-          .telephoneNumber("00000000002").mailAddress("test-update@gmail.com").build();
-
-      var history = List.of(
-          HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2022, 1, 1))
-              .departmentId(2).content("テスト入社").build(),
-          HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2023, 1, 1))
-              .departmentId(1).content("テスト退職-更新").build(),
-          HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2024, 1, 1))
-              .departmentId(3).content("テスト退職-追加").build());
-
-      var expectedEmployee = EmployeeDto.builder().employeeId("test")
-          .department(Department.PLANNING).employeeName("テスト更新").gender(Gender.MALE).personal(
-              PersonalDto.builder().employeeId("test").birthday(LocalDate.of(2020, 1, 1))
-                  .telephoneNumber("00000000002").mailAddress("test-update@gmail.com").build())
-          .historyList(List.of(
-              HistoryDto.builder().employeeId("test").startDate(LocalDate.of(2022, 1, 1))
-                  .departmentId(2).content("テスト入社").build(),
-              HistoryDto.builder().employeeId("test").startDate(LocalDate.of(2023, 1, 1))
-                  .departmentId(1).content("テスト退職-更新").build(),
-              HistoryDto.builder().employeeId("test").startDate(LocalDate.of(2024, 1, 1))
-                  .departmentId(3).content("テスト退職-追加").build())).build();
+    void update(EmployeeEntity employee, PersonalEntity personal, List<HistoryEntity> history,
+        List<EmployeeDto> expected) {
       // act
       target.upsert(employee, personal, history);
       // assert
       var actual = employeeMapper.selectAll();
-      var expected = List.of(expectedEmployee);
       softy.assertThat(actual).as("transactionNormal_update: database compare").isEqualTo(expected);
     }
 
@@ -158,6 +123,84 @@ class EmployeeLogicImplTest {
       var expected = List.of();
       softy.assertThat(actual).as("transactionNormal_delete: database compare").isEqualTo(expected);
     }
+
+    private Stream<Arguments> provider_insert() {
+      return Stream.of(
+          Arguments.of(
+              EmployeeEntity.builder().employeeId("test2").employeeName("テスト2")
+                  .departmentId(4).gender("MALE").build(),
+              PersonalEntity.builder().employeeId("test2")
+                  .birthday(LocalDate.of(2020, 2, 2))
+                  .telephoneNumber("00000000002").mailAddress("test2@gmail.com").build(),
+              List.of(
+                  HistoryEntity.builder().employeeId("test2").startDate(LocalDate.of(2022, 2, 2))
+                      .departmentId(4).content("テスト2入社").build()),
+              List.of(
+                  EmployeeDto.builder().employeeId("test")
+                      .department(Department.INDEPENDENT).employeeName("テスト").gender(Gender.FEMALE)
+                      .personal(
+                          PersonalDto.builder().employeeId("test")
+                              .birthday(LocalDate.of(2020, 1, 1))
+                              .telephoneNumber("00000000001").mailAddress("test@gmail.com").build())
+                      .historyList(List.of(
+                          HistoryDto.builder().employeeId("test")
+                              .startDate(LocalDate.of(2022, 1, 1))
+                              .departmentId(2).content("テスト入社").build(),
+                          HistoryDto.builder().employeeId("test")
+                              .startDate(LocalDate.of(2023, 1, 1))
+                              .departmentId(1).content("テスト退職").build())).build(),
+                  EmployeeDto.builder().employeeId("test2")
+                      .department(Department.DEVELOPMENT).employeeName("テスト2").gender(Gender.MALE)
+                      .personal(
+                          PersonalDto.builder().employeeId("test2")
+                              .birthday(LocalDate.of(2020, 2, 2))
+                              .telephoneNumber("00000000002").mailAddress("test2@gmail.com")
+                              .build())
+                      .historyList(List.of(
+                          HistoryDto.builder().employeeId("test2")
+                              .startDate(LocalDate.of(2022, 2, 2))
+                              .departmentId(4).content("テスト2入社").build())).build()
+              )
+          )
+      );
+    }
+
+    private Stream<Arguments> provider_update() {
+      return Stream.of(
+          Arguments.of(
+              EmployeeEntity.builder().employeeId("test").employeeName("テスト更新")
+                  .departmentId(3).gender("MALE").build(),
+              PersonalEntity.builder().employeeId("test").birthday(LocalDate.of(2020, 1, 1))
+                  .telephoneNumber("00000000002").mailAddress("test-update@gmail.com").build(),
+              List.of(
+                  HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2022, 1, 1))
+                      .departmentId(2).content("テスト入社").build(),
+                  HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2023, 1, 1))
+                      .departmentId(1).content("テスト退職-更新").build(),
+                  HistoryEntity.builder().employeeId("test").startDate(LocalDate.of(2024, 1, 1))
+                      .departmentId(3).content("テスト退職-追加").build()),
+              List.of(
+                  EmployeeDto.builder().employeeId("test")
+                      .department(Department.PLANNING).employeeName("テスト更新").gender(Gender.MALE)
+                      .personal(
+                          PersonalDto.builder().employeeId("test")
+                              .birthday(LocalDate.of(2020, 1, 1))
+                              .telephoneNumber("00000000002").mailAddress("test-update@gmail.com")
+                              .build())
+                      .historyList(List.of(
+                          HistoryDto.builder().employeeId("test")
+                              .startDate(LocalDate.of(2022, 1, 1))
+                              .departmentId(2).content("テスト入社").build(),
+                          HistoryDto.builder().employeeId("test")
+                              .startDate(LocalDate.of(2023, 1, 1))
+                              .departmentId(1).content("テスト退職-更新").build(),
+                          HistoryDto.builder().employeeId("test")
+                              .startDate(LocalDate.of(2024, 1, 1))
+                              .departmentId(3).content("テスト退職-追加").build())).build()
+              )
+          )
+      );
+    }
   }
 
   @Nested
@@ -165,10 +208,12 @@ class EmployeeLogicImplTest {
   @DisplayName("トランザクション-異常系")
   class transactionAbnormal {
 
-    @Test
+    @ParameterizedTest
+    @MethodSource(PROVIDER_PATH)
     @DisplayName("トランザクション-異常系-Employee登録時にエラー")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
-    void upsert_employeeMapper_Error() {
+    void upsert_employeeMapper_Error(EmployeeEntity employee, PersonalEntity personal,
+        List<HistoryEntity> history) {
 
       // arrange
       Mockito.doThrow(new RuntimeException()).when(employeeMapper).upsert(employee);
@@ -196,10 +241,12 @@ class EmployeeLogicImplTest {
           .isEqualTo(expected);
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource(PROVIDER_PATH)
     @DisplayName("トランザクション-異常系-Personal登録時にエラー")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
-    void upsert_personalMapper_Error() {
+    void upsert_personalMapper_Error(EmployeeEntity employee, PersonalEntity personal,
+        List<HistoryEntity> history) {
 
       // arrange
       Mockito.doThrow(new RuntimeException()).when(personalMapper).upsert(personal);
@@ -227,10 +274,12 @@ class EmployeeLogicImplTest {
           .isEqualTo(expected);
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource(PROVIDER_PATH)
     @DisplayName("トランザクション-異常系-History登録時にエラー")
     @DataSet(value = "datasets/EmployeeLogicImplTest/input_data.yml", cleanBefore = true)
-    void upsert_historyMapper_Error() {
+    void upsert_historyMapper_Error(EmployeeEntity employee, PersonalEntity personal,
+        List<HistoryEntity> history) {
 
       // arrange
       Mockito.doThrow(new RuntimeException()).when(historyMapper).bulkUpsert(history);
@@ -350,8 +399,5 @@ class EmployeeLogicImplTest {
       softy.assertThat(actual).as("delete_historyMapper_Error: database compare")
           .isEqualTo(expected);
     }
-
-
   }
-
 }
