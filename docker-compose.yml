@@ -14,5 +14,5 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./database/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/config/my.cnf:/etc/mysql/conf.d/my.cnf
