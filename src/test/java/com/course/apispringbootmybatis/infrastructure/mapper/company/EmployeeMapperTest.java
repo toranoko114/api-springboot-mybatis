@@ -1,6 +1,7 @@
-package com.course.apispringbootmybatis.infrastructure.mapper;
+package com.course.apispringbootmybatis.infrastructure.mapper.company;
 
 
+import com.course.apispringbootmybatis.config.CompanyDataSourceConfig;
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.dto.HistoryDto;
 import com.course.apispringbootmybatis.domain.dto.PersonalDto;
@@ -29,11 +30,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 @DBRider
 @ActiveProfiles("test")
 @MybatisTest
 @ExtendWith(SoftAssertionsExtension.class)
+@ContextConfiguration(classes = CompanyDataSourceConfig.class)
 class EmployeeMapperTest {
 
   @InjectSoftAssertions

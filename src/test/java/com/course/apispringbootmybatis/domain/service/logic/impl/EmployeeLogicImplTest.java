@@ -2,6 +2,7 @@ package com.course.apispringbootmybatis.domain.service.logic.impl;
 
 import static org.mockito.ArgumentMatchers.any;
 
+import com.course.apispringbootmybatis.config.CompanyDataSourceConfig;
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.dto.HistoryDto;
 import com.course.apispringbootmybatis.domain.dto.PersonalDto;
@@ -10,9 +11,9 @@ import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import com.course.apispringbootmybatis.enums.Department;
 import com.course.apispringbootmybatis.enums.Gender;
-import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
-import com.course.apispringbootmybatis.infrastructure.mapper.HistoryMapper;
-import com.course.apispringbootmybatis.infrastructure.mapper.PersonalMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.company.HistoryMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.company.PersonalMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import java.time.LocalDate;
@@ -35,11 +36,13 @@ import org.mockito.Mockito;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 @DBRider
 @MybatisTest
 @ActiveProfiles("test")
 @ExtendWith(SoftAssertionsExtension.class)
+@ContextConfiguration(classes = CompanyDataSourceConfig.class)
 class EmployeeLogicImplTest {
 
   @InjectSoftAssertions

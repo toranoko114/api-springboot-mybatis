@@ -8,7 +8,7 @@ import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
 import com.course.apispringbootmybatis.domain.service.EmployeeService;
 import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
-import com.course.apispringbootmybatis.infrastructure.mapper.EmployeeMapper;
+import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMapper;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

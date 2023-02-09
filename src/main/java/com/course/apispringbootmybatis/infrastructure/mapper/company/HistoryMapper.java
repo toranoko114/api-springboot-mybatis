@@ -1,4 +1,4 @@
-package com.course.apispringbootmybatis.infrastructure.mapper;
+package com.course.apispringbootmybatis.infrastructure.mapper.company;
 
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import java.util.List;

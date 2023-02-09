@@ -1,5 +1,6 @@
-package com.course.apispringbootmybatis.infrastructure.mapper;
+package com.course.apispringbootmybatis.infrastructure.mapper.company;
 
+import com.course.apispringbootmybatis.config.CompanyDataSourceConfig;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -14,10 +15,12 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 @MybatisTest
 @DBRider
 @ActiveProfiles("test")
+@ContextConfiguration(classes = CompanyDataSourceConfig.class)
 class HistoryMapperTest {
 
   @Autowired
