@@ -7,12 +7,12 @@
     <setting name="mapUnderscoreToCamelCase" value="true" />
   </settings>
   <typeAliases>
-    <typeAlias alias="EmployeeDto" type="com.course.apispringbootmybatis.domain.dto.EmployeeDto"/>
-    <typeAlias alias="PersonalDto" type="com.course.apispringbootmybatis.domain.dto.PersonalDto"/>
-    <typeAlias alias="HistoryDto" type="com.course.apispringbootmybatis.domain.dto.HistoryDto"/>
+    <typeAlias alias="EmployeeDto" type="com.course.api.springboot.mybatis.domain.dto.EmployeeDto"/>
+    <typeAlias alias="PersonalDto" type="com.course.api.springboot.mybatis.domain.dto.PersonalDto"/>
+    <typeAlias alias="HistoryDto" type="com.course.api.springboot.mybatis.domain.dto.HistoryDto"/>
   </typeAliases>
   <typeHandlers>
-    <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.course.apispringbootmybatis.enums.Department"/>
-    <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="com.course.apispringbootmybatis.enums.Gender"/>
+    <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.course.api.springboot.mybatis.enums.Department"/>
+    <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="com.course.api.springboot.mybatis.enums.Gender"/>
   </typeHandlers>
 </configuration>

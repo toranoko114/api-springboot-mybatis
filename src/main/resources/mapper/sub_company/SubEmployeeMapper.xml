@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.sub_company.SubEmployeeMapper">
+<mapper namespace="com.course.api.springboot.mybatis.infrastructure.mapper.sub_company.SubEmployeeMapper">
 
   <!-- 取得結果とDtoとのマッピング定義-->
   <resultMap id="employeeMap" type="EmployeeDto">
