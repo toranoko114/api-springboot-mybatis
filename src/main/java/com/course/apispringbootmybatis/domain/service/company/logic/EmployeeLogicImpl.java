@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 社員情報APIのロジック実装クラス
  */
-@Service
+@Service("companyEmployeeLogicImpl")
 @AllArgsConstructor
 public class EmployeeLogicImpl implements EmployeeLogic {
 

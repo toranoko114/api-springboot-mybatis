@@ -12,17 +12,18 @@ import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMap
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
  * 社員情報APIのサービス実装クラス
  */
-@Service
+@Service("companyEmployeeServiceImpl")
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+  @Qualifier("companyEmployeeLogicImpl") private final EmployeeLogic logic;
   private final ModelMapper modelMapper;
-  private final EmployeeLogic logic;
   private final EmployeeMapper employeeMapper;
 
   @Override
