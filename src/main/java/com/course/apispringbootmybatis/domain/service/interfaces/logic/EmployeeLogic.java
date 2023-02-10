@@ -1,4 +1,4 @@
-package com.course.apispringbootmybatis.domain.service.logic;
+package com.course.apispringbootmybatis.domain.service.interfaces.logic;
 
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;

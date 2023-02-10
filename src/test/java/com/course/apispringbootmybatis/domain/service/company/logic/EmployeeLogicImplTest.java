@@ -1,4 +1,4 @@
-package com.course.apispringbootmybatis.domain.service.logic.impl;
+package com.course.apispringbootmybatis.domain.service.company.logic;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -57,7 +57,7 @@ class EmployeeLogicImplTest {
   private PersonalMapper personalMapper;
 
   private static final String PROVIDER_PATH =
-      "com.course.apispringbootmybatis.domain.service.logic.impl.EmployeeLogicImplTest#provider_entity";
+      "com.course.apispringbootmybatis.domain.service.company.logic.EmployeeLogicImplTest#provider_entity";
 
   private static Stream<Arguments> provider_entity() {
     return Stream.of(

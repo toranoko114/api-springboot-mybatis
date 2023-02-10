@@ -1,13 +1,12 @@
-package com.course.apispringbootmybatis.domain.service;
+package com.course.apispringbootmybatis.domain.service.company;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
 import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundException;
 import com.course.apispringbootmybatis.config.CompanyDataSourceConfig;
-import com.course.apispringbootmybatis.domain.service.impl.EmployeeServiceImpl;
-import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
-import com.course.apispringbootmybatis.domain.service.logic.impl.EmployeeLogicImpl;
+import com.course.apispringbootmybatis.domain.service.company.logic.EmployeeLogicImpl;
+import com.course.apispringbootmybatis.domain.service.interfaces.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;

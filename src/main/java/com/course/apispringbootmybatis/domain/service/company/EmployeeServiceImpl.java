@@ -1,4 +1,4 @@
-package com.course.apispringbootmybatis.domain.service.impl;
+package com.course.apispringbootmybatis.domain.service.company;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.application.exception.EmployeeNotFoundException;
@@ -6,10 +6,10 @@ import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
-import com.course.apispringbootmybatis.domain.service.EmployeeService;
-import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
+import com.course.apispringbootmybatis.domain.service.interfaces.EmployeeService;
+import com.course.apispringbootmybatis.domain.service.interfaces.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMapper;
-import java.util.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

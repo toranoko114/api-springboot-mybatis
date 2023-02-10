@@ -1,9 +1,9 @@
-package com.course.apispringbootmybatis.domain.service.logic.impl;
+package com.course.apispringbootmybatis.domain.service.company.logic;
 
 import com.course.apispringbootmybatis.domain.entity.EmployeeEntity;
 import com.course.apispringbootmybatis.domain.entity.HistoryEntity;
 import com.course.apispringbootmybatis.domain.entity.PersonalEntity;
-import com.course.apispringbootmybatis.domain.service.logic.EmployeeLogic;
+import com.course.apispringbootmybatis.domain.service.interfaces.logic.EmployeeLogic;
 import com.course.apispringbootmybatis.infrastructure.mapper.company.EmployeeMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.company.HistoryMapper;
 import com.course.apispringbootmybatis.infrastructure.mapper.company.PersonalMapper;

@@ -2,7 +2,7 @@ package com.course.apispringbootmybatis.application.controller;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.application.controller.message.EmployeeResponse;
-import com.course.apispringbootmybatis.domain.service.EmployeeService;
+import com.course.apispringbootmybatis.domain.service.interfaces.EmployeeService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

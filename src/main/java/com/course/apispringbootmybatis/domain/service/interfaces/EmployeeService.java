@@ -1,4 +1,4 @@
-package com.course.apispringbootmybatis.domain.service;
+package com.course.apispringbootmybatis.domain.service.interfaces;
 
 import com.course.apispringbootmybatis.application.controller.message.EmployeeRequest;
 import com.course.apispringbootmybatis.domain.dto.EmployeeDto;
