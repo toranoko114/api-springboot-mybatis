@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.apispringbootmybatis.infrastructure.mapper.sub_company.SubEmployeeMapper">
+
+  <!-- 取得結果とDtoとのマッピング定義-->
+  <resultMap id="employeeMap" type="EmployeeDto">
+    <id property="employeeId" column="EMP_EMPLOYEE_ID"/>
+    <result property="employeeName" column="EMP_EMPLOYEE_NAME"/>
+    <result property="gender" column="EMP_GENDER"/>
+    <result property="department" column="EMP_DEPARTMENT_ID" />
+    <association property="personal" javaType="PersonalDto">
+      <id property="employeeId" column="PD_EMPLOYEE_ID"/>
+      <result property="birthday" column="PD_BIRTHDAY"/>
+      <result property="telephoneNumber" column="PD_TELEPHONE_NUMBER"/>
+      <result property="mailAddress" column="PD_MAIL_ADDRESS"/>
+    </association>
+    <collection property="historyList" ofType="HistoryDto">
+      <!-- 複合主キー -->
+      <id property="startDate" column="HST_START_DATE"/>
+      <id property="employeeId" column="HST_EMPLOYEE_ID"/>
+      <id property="departmentId" column="HST_DEPARTMENT_ID"/>
+      <result property="content" column="HST_CONTENT"/>
+    </collection>
+  </resultMap>
+
+  <!-- 取得するカラム定義 -->
+  <sql id="employeeColumns">
+    ${alias}.EMPLOYEE_ID as EMP_EMPLOYEE_ID,
+    ${alias}.EMPLOYEE_NAME as EMP_EMPLOYEE_NAME,
+    ${alias}.GENDER as EMP_GENDER,
+    ${alias}.DEPARTMENT_ID as EMP_DEPARTMENT_ID,
+  </sql>
+  <sql id="personalColumns">
+    PD.EMPLOYEE_ID as PD_EMPLOYEE_ID,
+    PD.BIRTHDAY as PD_BIRTHDAY,
+    PD.TELEPHONE_NUMBER as PD_TELEPHONE_NUMBER,
+    PD.MAIL_ADDRESS as PD_MAIL_ADDRESS,
+  </sql>
+  <sql id="historyColumns">
+    HST.START_DATE as HST_START_DATE,
+    HST.EMPLOYEE_ID as HST_EMPLOYEE_ID,
+    HST.DEPARTMENT_ID as HST_DEPARTMENT_ID,
+    HST.CONTENT as HST_CONTENT
+  </sql>
+
+  <sql id="baseSelect">
+    SELECT
+      <include refid="employeeColumns">
+        <property name="alias" value="EMP"/>
+      </include>
+      <include refid="personalColumns"/>
+      <include refid="historyColumns"/>
+    FROM
+      EMPLOYEE EMP
+        LEFT JOIN PERSONAL PD
+          ON
+          EMP.EMPLOYEE_ID = PD.EMPLOYEE_ID
+        LEFT JOIN HISTORY HST
+          ON
+          EMP.EMPLOYEE_ID = HST.EMPLOYEE_ID
+  </sql>
+
+  <select id="selectById" resultMap="employeeMap">
+    <include refid="baseSelect"/>
+    WHERE
+      EMP.EMPLOYEE_ID = #{employeeId}
+  </select>
+
+  <select id="selectAll" resultMap="employeeMap">
+    <include refid="baseSelect"/>
+  </select>
+
+  <insert id="upsert">
+    INSERT INTO EMPLOYEE
+    (
+      EMPLOYEE_ID,
+      EMPLOYEE_NAME,
+      DEPARTMENT_ID,
+      GENDER
+    )
+    VALUES
+    (
+      #{employeeId},
+      #{employeeName},
+      #{departmentId},
+      #{gender}
+    )
+    ON DUPLICATE KEY UPDATE
+      EMPLOYEE_NAME = VALUES(EMPLOYEE_NAME),
+      DEPARTMENT_ID = VALUES(DEPARTMENT_ID),
+      GENDER = VALUES(GENDER)
+  </insert>
+
+</mapper>
