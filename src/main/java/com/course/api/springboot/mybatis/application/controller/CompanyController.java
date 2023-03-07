@@ -4,7 +4,7 @@ import com.course.api.springboot.mybatis.application.controller.message.Employee
 import com.course.api.springboot.mybatis.application.controller.message.EmployeeResponse;
 import com.course.api.springboot.mybatis.domain.service.interfaces.EmployeeService;
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
