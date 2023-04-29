@@ -78,6 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public void deleteById(String employeeId) {
+    // 社員が存在する場合のみ後続処理をする
+    this.selectById(employeeId);
     this.logic.deleteById(employeeId);
   }
 }
