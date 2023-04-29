@@ -26,31 +26,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/employee")
 public class CompanyController {
 
-  @Qualifier("companyEmployeeServiceImpl") private final EmployeeService service;
+  @Qualifier("companyEmployeeServiceImpl")
+  private final EmployeeService service;
   private final ModelMapper modelMapper;
 
   @GetMapping("/{employeeId}")
-  public EmployeeResponse fetchEmployee(
+  public ResponseEntity<EmployeeResponse> fetchEmployee(
       @PathVariable(value = "employeeId") String employeeId) {
-    return this.modelMapper.map(service.selectById(employeeId), EmployeeResponse.class);
+    return ResponseEntity.ok()
+        .body(this.modelMapper.map(service.selectById(employeeId), EmployeeResponse.class));
   }
 
   @GetMapping("/")
-  public List<EmployeeResponse> fetchEmployees() {
+  public ResponseEntity<List<EmployeeResponse>> fetchEmployees() {
     var employeeDtoList = service.selectAll();
-    return List.of(this.modelMapper.map(employeeDtoList, EmployeeResponse[].class));
+    return ResponseEntity.ok()
+        .body(List.of(this.modelMapper.map(employeeDtoList, EmployeeResponse[].class)));
   }
 
   @PostMapping("/")
-  public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeRequest request) {
-    return this.modelMapper.map(service.create(request), EmployeeResponse.class);
+  public ResponseEntity<EmployeeResponse> createEmployee(
+      @Valid @RequestBody EmployeeRequest request) {
+    return ResponseEntity.ok()
+        .body(this.modelMapper.map(service.create(request), EmployeeResponse.class));
   }
 
   @PatchMapping("/{employeeId}")
-  public EmployeeResponse updateEmployee(
+  public ResponseEntity<EmployeeResponse> updateEmployee(
       @PathVariable(value = "employeeId") String employeeId,
       @Valid @RequestBody EmployeeRequest request) {
-    return this.modelMapper.map(service.update(employeeId, request), EmployeeResponse.class);
+    return ResponseEntity.ok()
+        .body(this.modelMapper.map(service.update(employeeId, request), EmployeeResponse.class));
   }
 
   @DeleteMapping("/{employeeId}")
